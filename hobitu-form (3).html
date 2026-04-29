@@ -6,18 +6,9 @@
 <title>Hobitu Eksik Stok</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #0f1117; color: #e8e9ed; min-height: 100vh; padding-bottom: 40px;
-}
-.header {
-  background: #1a1d27; padding: 16px 20px; border-bottom: 1px solid #2a2d3a;
-  display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100;
-}
-.logo {
-  width: 34px; height: 34px; background: #ff6b35; border-radius: 9px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e8e9ed; min-height: 100vh; padding-bottom: 40px; }
+.header { background: #1a1d27; padding: 16px 20px; border-bottom: 1px solid #2a2d3a; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+.logo { width: 34px; height: 34px; background: #ff6b35; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .logo svg { width: 20px; height: 20px; fill: white; }
 .header-text h1 { font-size: 16px; font-weight: 700; color: #fff; }
 .header-text p { font-size: 11px; color: #666; margin-top: 1px; }
@@ -27,103 +18,42 @@ label { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transfor
 label .req { color: #ff6b35; }
 .scan-row { display: flex; gap: 8px; align-items: stretch; }
 .scan-row input { flex: 1; }
-input, textarea {
-  background: #1a1d27; border: 1.5px solid #2a2d3a; border-radius: 11px;
-  padding: 13px 14px; font-size: 16px; color: #e8e9ed; width: 100%;
-  outline: none; transition: border-color 0.15s; -webkit-appearance: none;
-}
+input, textarea { background: #1a1d27; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 13px 14px; font-size: 16px; color: #e8e9ed; width: 100%; outline: none; transition: border-color 0.15s; -webkit-appearance: none; }
 input:focus, textarea:focus { border-color: #ff6b35; background: #1d2030; }
 input::placeholder, textarea::placeholder { color: #444; }
 textarea { resize: none; min-height: 76px; font-family: inherit; font-size: 15px; }
-.scan-btn {
-  background: #ff6b35; border: none; border-radius: 11px; padding: 0 16px;
-  color: white; font-size: 13px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; gap: 6px; white-space: nowrap;
-  flex-shrink: 0; min-height: 50px; font-family: inherit;
-}
+.scan-btn { background: #ff6b35; border: none; border-radius: 11px; padding: 0 16px; color: white; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0; min-height: 50px; font-family: inherit; }
 .scan-btn:active { opacity: 0.8; }
 .scan-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
-.camera-wrap {
-  display: none; flex-direction: column; border-radius: 14px;
-  overflow: hidden; border: 1.5px solid #ff6b35; background: #000; position: relative;
-}
-.camera-wrap.show { display: flex; }
-#videoEl { width: 100%; max-height: 260px; object-fit: cover; display: block; }
-canvas#snapCanvas { display: none; }
-.scan-overlay {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 36px;
-  display: flex; align-items: center; justify-content: center; pointer-events: none;
-}
-.scan-guide {
-  width: 230px; height: 95px; border: 2.5px solid #ff6b35; border-radius: 10px;
-  position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); overflow: hidden;
-}
-.scan-line {
-  position: absolute; left: 0; right: 0; height: 2px;
-  background: #ff6b35; box-shadow: 0 0 8px #ff6b35;
-  animation: scanline 1.6s ease-in-out infinite;
-}
-@keyframes scanline { 0%,100% { top: 0; } 50% { top: calc(100% - 2px); } }
-.cam-status { background: #0a0a0a; text-align: center; font-size: 12px; color: #888; padding: 8px; }
-.cam-status .ok { color: #4ade80; font-weight: 700; }
-.cam-status .active { color: #ff6b35; font-weight: 600; }
-.close-cam {
-  background: #1a1d27; border: none; color: #aaa; font-size: 13px; padding: 11px;
-  cursor: pointer; border-top: 1px solid #2a2d3a; text-align: center; font-family: inherit; width: 100%;
-}
-.photo-preview {
-  display: none; background: #1a1d27; border: 1.5px solid #2a2d3a;
-  border-radius: 12px; padding: 12px; align-items: center; gap: 12px;
-}
+.photo-preview { display: none; background: #1a1d27; border: 1.5px solid #2a2d3a; border-radius: 12px; padding: 12px; align-items: center; gap: 12px; }
 .photo-preview.show { display: flex; }
 .photo-preview img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 .photo-preview-text { flex: 1; }
 .photo-preview-text p { font-size: 13px; color: #aaa; margin-bottom: 4px; }
 .photo-preview-text strong { font-size: 15px; color: #fff; }
-.retry-btn {
-  background: transparent; border: 1px solid #555; border-radius: 8px;
-  color: #aaa; font-size: 12px; padding: 6px 10px; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0;
-}
+.retry-btn { background: transparent; border: 1px solid #555; border-radius: 8px; color: #aaa; font-size: 12px; padding: 6px 10px; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0; }
+.scan-status { background: #1a1d27; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 12px 14px; font-size: 13px; color: #888; display: none; text-align: center; }
+.scan-status.show { display: block; }
+.scan-status.ok { color: #4ade80; border-color: #4ade80; }
+.scan-status.err { color: #f87171; border-color: #f87171; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .divider { height: 1px; background: #2a2d3a; margin: 2px 0; }
-.submit-btn {
-  background: #ff6b35; border: none; border-radius: 13px; padding: 17px;
-  color: white; font-size: 17px; font-weight: 700; width: 100%;
-  cursor: pointer; font-family: inherit; margin-top: 4px; transition: opacity 0.15s, transform 0.1s;
-}
+.submit-btn { background: #ff6b35; border: none; border-radius: 13px; padding: 17px; color: white; font-size: 17px; font-weight: 700; width: 100%; cursor: pointer; font-family: inherit; margin-top: 4px; transition: opacity 0.15s, transform 0.1s; }
 .submit-btn:active { transform: scale(0.98); opacity: 0.9; }
-.submit-btn:disabled { opacity: 0.4; }
+.submit-btn:disabled { opacity: 0.5; }
 .err { font-size: 11px; color: #f87171; display: none; margin-top: 2px; }
-.success {
-  display: none; flex-direction: column; align-items: center;
-  justify-content: center; min-height: 80vh; padding: 40px 20px; text-align: center; gap: 14px;
-}
+.success { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; padding: 40px 20px; text-align: center; gap: 14px; }
 .success.show { display: flex; }
-.check-circle {
-  width: 80px; height: 80px; background: #0f2e0f; border: 2px solid #4ade80;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 6px;
-}
+.check-circle { width: 80px; height: 80px; background: #0f2e0f; border: 2px solid #4ade80; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
 .success h2 { font-size: 22px; color: #4ade80; font-weight: 700; }
 .success p { font-size: 14px; color: #777; max-width: 260px; line-height: 1.6; }
-.detail-card {
-  background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 12px;
-  padding: 14px 16px; width: 100%; max-width: 340px; text-align: left;
-}
+.detail-card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 12px; padding: 14px 16px; width: 100%; max-width: 340px; text-align: left; }
 .detail-card .lbl { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
 .detail-card .val { font-size: 15px; color: #e8e9ed; font-weight: 600; margin-bottom: 10px; }
 .detail-card .val:last-child { margin-bottom: 0; }
-.new-btn {
-  background: transparent; border: 1.5px solid #ff6b35; border-radius: 12px;
-  padding: 14px 36px; color: #ff6b35; font-size: 16px; font-weight: 700;
-  cursor: pointer; margin-top: 6px; font-family: inherit;
-}
+.new-btn { background: transparent; border: 1.5px solid #ff6b35; border-radius: 12px; padding: 14px 36px; color: #ff6b35; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px; font-family: inherit; }
 .new-btn:active { background: #1a0d00; }
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: #222; border: 1px solid #333; border-radius: 10px;
-  padding: 10px 20px; font-size: 13px; color: #fff; z-index: 999;
-  opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
-}
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #222; border: 1px solid #333; border-radius: 10px; padding: 10px 20px; font-size: 13px; color: #fff; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; }
 </style>
 </head>
@@ -139,21 +69,19 @@ canvas#snapCanvas { display: none; }
   </div>
 </div>
 
-<input type="file" id="iosInput" accept="image/*" capture="environment" style="display:none" onchange="handleIOSPhoto(this)">
-<canvas id="snapCanvas"></canvas>
+<input type="file" id="iosInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+<canvas id="snapCanvas" style="display:none"></canvas>
 
 <form id="mainForm" class="form-body" onsubmit="submitForm(event)">
   <div class="field">
     <label>Sipariş No <span class="req">*</span></label>
     <div class="scan-row">
       <input type="text" id="siparisNo" placeholder="TS2804394243" autocomplete="off" autocorrect="off" autocapitalize="characters" />
-      <button type="button" class="scan-btn" onclick="handleScanBtn()">
+      <button type="button" class="scan-btn" onclick="document.getElementById('iosInput').click()">
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
           <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
-          <line x1="8" y1="12" x2="16" y2="12" stroke-width="2.5"/>
-          <line x1="8" y1="15" x2="16" y2="15" stroke-width="2.5"/>
-          <line x1="8" y1="9" x2="11" y2="9" stroke-width="2.5"/>
+          <line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="8" y1="9" x2="11" y2="9"/>
         </svg>
         Tara
       </button>
@@ -161,12 +89,7 @@ canvas#snapCanvas { display: none; }
     <div class="err" id="err-siparis">Sipariş numarası gerekli</div>
   </div>
 
-  <div class="camera-wrap" id="cameraWrap">
-    <video id="videoEl" autoplay playsinline muted></video>
-    <div class="scan-overlay"><div class="scan-guide"><div class="scan-line"></div></div></div>
-    <div class="cam-status" id="camStatus">Barkodu çerçeveye hizalayın — <span class="active">okuma aktif</span></div>
-    <button type="button" class="close-cam" onclick="stopCamera()">✕ Kamerayı Kapat</button>
-  </div>
+  <div class="scan-status" id="scanStatus"></div>
 
   <div class="photo-preview" id="photoPreview">
     <img id="previewImg" src="" alt="">
@@ -220,11 +143,8 @@ canvas#snapCanvas { display: none; }
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.19.1/umd/index.min.js"></script>
 <script>
 const WEBHOOK = 'https://tuzwzs6k.rpcld.app/webhook/eksik-stok';
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-let stream = null, scanInterval = null, nativeDetector = null;
 
 function showToast(msg, dur) {
   const t = document.getElementById('toast');
@@ -233,130 +153,91 @@ function showToast(msg, dur) {
   setTimeout(() => t.classList.remove('show'), dur || 2500);
 }
 
-if ('BarcodeDetector' in window) {
-  BarcodeDetector.getSupportedFormats().then(f => {
-    nativeDetector = new BarcodeDetector({ formats: f });
-  }).catch(() => {
-    nativeDetector = new BarcodeDetector({ formats: ['code_128','ean_13','ean_8','qr_code','itf','upc_a','upc_e','code_39'] });
-  });
+function setStatus(msg, type) {
+  const s = document.getElementById('scanStatus');
+  s.textContent = msg;
+  s.className = 'scan-status show ' + (type || '');
 }
 
-function handleScanBtn() {
-  if (isIOS) { document.getElementById('iosInput').click(); }
-  else { startAndroidCamera(); }
-}
-
-function handleIOSPhoto(input) {
+function handlePhoto(input) {
   const file = input.files[0];
   if (!file) return;
-  showToast('Barkod aranıyor...');
+  setStatus('Barkod aranıyor...', '');
+
   const url = URL.createObjectURL(file);
   const img = new Image();
   img.onload = () => {
     const canvas = document.getElementById('snapCanvas');
-    canvas.width = img.width; canvas.height = img.height;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let found = false;
 
-    const qr = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'attemptBoth' });
-    if (qr) { onBarcodeFound(qr.data, url); found = true; }
-
-    if (!found && typeof ZXing !== 'undefined') {
-      try {
-        const hints = new Map();
-        hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
-        const reader = new ZXing.MultiFormatReader();
-        reader.setHints(hints);
-        const lum = new ZXing.RGBLuminanceSource(imageData.data, canvas.width, canvas.height);
-        const bmp = new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(lum));
-        const result = reader.decode(bmp);
-        if (result) { onBarcodeFound(result.getText(), url); found = true; }
-      } catch(e) {}
-    }
-
-    if (!found) {
-      showToast('Barkod okunamadı — daha yakın çekin.');
-      input.value = '';
-    }
-    URL.revokeObjectURL(url);
+    // Orijinal boyutta dene
+    tryDecode(img, canvas, ctx, 1, url, () => {
+      // Daha büyük boyutta dene
+      tryDecode(img, canvas, ctx, 2, url, () => {
+        // Crop edilmiş orta bölgeyi dene
+        tryDecodeCrop(img, canvas, ctx, url, () => {
+          setStatus('Barkod okunamadı — daha yakın ve düz çekin.', 'err');
+          input.value = '';
+          URL.revokeObjectURL(url);
+        });
+      });
+    });
   };
   img.src = url;
 }
 
-function onBarcodeFound(value, imgUrl) {
+function tryDecode(img, canvas, ctx, scale, url, onFail) {
+  canvas.width = img.width * scale;
+  canvas.height = img.height * scale;
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  // jsQR
+  const qr = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'attemptBoth' });
+  if (qr && qr.data) { onFound(qr.data, url); return; }
+
+  onFail();
+}
+
+function tryDecodeCrop(img, canvas, ctx, url, onFail) {
+  // Ortayı crop et
+  const cw = img.width * 0.8;
+  const ch = img.height * 0.5;
+  const cx = (img.width - cw) / 2;
+  const cy = (img.height - ch) / 2;
+  canvas.width = cw * 2;
+  canvas.height = ch * 2;
+  ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvas.width, canvas.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const qr = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'attemptBoth' });
+  if (qr && qr.data) { onFound(qr.data, url); return; }
+  onFail();
+}
+
+function onFound(value, imgUrl) {
   document.getElementById('siparisNo').value = value;
+  setStatus('✓ Barkod okundu: ' + value, 'ok');
   if (imgUrl) {
     document.getElementById('previewImg').src = imgUrl;
     document.getElementById('previewCode').textContent = value;
     document.getElementById('photoPreview').classList.add('show');
   }
   navigator.vibrate && navigator.vibrate([80, 30, 80]);
-  showToast('✓ Barkod okundu!');
   setTimeout(() => document.getElementById('eksikUrun').focus(), 300);
 }
 
 function retryPhoto() {
   document.getElementById('photoPreview').classList.remove('show');
+  document.getElementById('scanStatus').className = 'scan-status';
   document.getElementById('iosInput').value = '';
   document.getElementById('siparisNo').value = '';
   document.getElementById('iosInput').click();
 }
 
-async function startAndroidCamera() {
-  const wrap = document.getElementById('cameraWrap');
-  const video = document.getElementById('videoEl');
-  wrap.classList.add('show');
-  document.getElementById('camStatus').innerHTML = 'Kamera başlatılıyor...';
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }
-    });
-    video.srcObject = stream;
-    await new Promise(r => { video.onloadedmetadata = r; });
-    await video.play();
-    document.getElementById('camStatus').innerHTML = 'Barkodu çerçeveye hizalayın — <span class="active">okuma aktif</span>';
-    startLiveScan(video);
-  } catch(e) {
-    wrap.classList.remove('show');
-    showToast('Kamera izni gerekli!');
-  }
-}
-
-function startLiveScan(video) {
-  const canvas = document.getElementById('snapCanvas');
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  let last = 0;
-  scanInterval = setInterval(async () => {
-    if (video.readyState < 2) return;
-    const now = Date.now();
-    if (now - last < 200) return;
-    last = now;
-    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
-    if (nativeDetector) {
-      try {
-        const r = await nativeDetector.detect(canvas);
-        if (r.length > 0) { stopCamera(); onBarcodeFound(r[0].rawValue, null); }
-      } catch(e) {}
-    } else {
-      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const qr = jsQR(img.data, img.width, img.height);
-      if (qr) { stopCamera(); onBarcodeFound(qr.data, null); }
-    }
-  }, 150);
-}
-
-function stopCamera() {
-  clearInterval(scanInterval); scanInterval = null;
-  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
-  document.getElementById('cameraWrap').classList.remove('show');
-  document.getElementById('videoEl').srcObject = null;
-}
-
 async function submitForm(e) {
   e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+
   const siparisNo = document.getElementById('siparisNo').value.trim();
   const eksikUrun = document.getElementById('eksikUrun').value.trim();
   const eksikMiktar = document.getElementById('eksikMiktar').value.trim();
@@ -370,23 +251,21 @@ async function submitForm(e) {
   if (!eksikMiktar) { document.getElementById('err-eksik').style.display = 'block'; valid = false; }
   if (!valid) return;
 
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true; btn.textContent = 'Gönderiliyor...';
+  btn.disabled = true;
+  btn.textContent = 'Gönderiliyor...';
 
   try {
-    const payload = {
-      'Sipariş No': siparisNo,
-      'Eksik Ürün': eksikUrun,
-      'Eksik Miktar': eksikMiktar,
-      'Mevcut Miktar': mevcutMiktar || '0',
-      'Not': not
-    };
-
     await fetch(WEBHOOK, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        'Sipariş No': siparisNo,
+        'Eksik Ürün': eksikUrun,
+        'Eksik Miktar': eksikMiktar,
+        'Mevcut Miktar': mevcutMiktar || '0',
+        'Not': not
+      })
     });
 
     document.getElementById('detailCard').innerHTML =
@@ -400,16 +279,30 @@ async function submitForm(e) {
     navigator.vibrate && navigator.vibrate([100, 50, 100]);
   } catch(err) {
     showToast('Bağlantı hatası. Tekrar deneyin.');
-    btn.disabled = false; btn.textContent = 'Gönder';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Gönder';
   }
 }
 
 function resetForm() {
-  document.getElementById('mainForm').reset();
+  // Formu tamamen sıfırla
+  document.getElementById('siparisNo').value = '';
+  document.getElementById('eksikUrun').value = '';
+  document.getElementById('eksikMiktar').value = '';
+  document.getElementById('mevcutMiktar').value = '';
+  document.getElementById('notAlani').value = '';
+  document.getElementById('iosInput').value = '';
+  document.getElementById('photoPreview').classList.remove('show');
+  document.getElementById('scanStatus').className = 'scan-status';
+  document.querySelectorAll('.err').forEach(el => el.style.display = 'none');
+  
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  btn.textContent = 'Gönder';
+  
   document.getElementById('mainForm').style.display = 'flex';
   document.getElementById('successScreen').classList.remove('show');
-  document.getElementById('photoPreview').classList.remove('show');
-  document.getElementById('iosInput').value = '';
 }
 </script>
 </body>

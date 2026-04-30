@@ -26,6 +26,9 @@
   --purple: #a855f7;
   --purple-bg: #1a0f29;
   --purple-border: #4a1f7a;
+  --orange: #f97316;
+  --orange-bg: #1f0e00;
+  --orange-border: #7a3500;
   --yellow: #eab308;
   --yellow-bg: #1f1a00;
 }
@@ -63,7 +66,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .cards { padding: 0 16px 24px; display: flex; flex-direction: column; gap: 10px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .card.done { opacity: 0.5; }
-.card.degisim { border-color: var(--blue-border); }
 .card-top { padding: 14px 14px 10px; }
 .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 .card-siparis { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); }
@@ -77,24 +79,22 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .card-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 .meta-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; }
 .meta-pill.eksik { color: var(--red); border-color: #3a1515; background: #1f0f0f; }
-.card-bottom { border-top: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.card-bottom { border-top: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .card-tarih { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; flex-shrink: 0; }
 .card-btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 
-.btn { border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; border: 1px solid; white-space: nowrap; }
+.btn { border-radius: 8px; padding: 7px 11px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; border: 1px solid; white-space: nowrap; }
 .btn:active { opacity: 0.8; }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
 .btn-blue { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
-.btn-purple { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); }
-.btn-ghost { background: transparent; border-color: var(--border); color: var(--text3); cursor: default; }
+.btn-orange { background: var(--orange-bg); border-color: var(--orange-border); color: var(--orange); }
+.btn-ghost { background: transparent; border-color: var(--border); color: var(--text3); cursor: default; font-size: 11px; }
 
-/* EMPTY */
 .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 12px; color: var(--text3); text-align: center; }
 .empty-state svg { width: 36px; height: 36px; opacity: 0.3; }
 .empty-state p { font-size: 14px; }
 
-/* DESKTOP */
 @media (min-width: 768px) {
   .cards { display: none; }
   .table-section { display: block; padding: 0 24px 24px; }
@@ -119,9 +119,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .col-num { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
 .col-num.eksik { color: var(--red); font-weight: 500; }
 .col-tarih { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; }
-.col-action { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+.col-action { display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; }
 
-/* MODAL */
+/* MODALS */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
 .modal-overlay.show { opacity: 1; pointer-events: all; }
 .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 20px 20px 0 0; padding: 24px 20px 36px; width: 100%; max-width: 500px; transform: translateY(100%); transition: transform 0.25s; max-height: 90vh; overflow-y: auto; }
@@ -138,9 +138,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .modal-cancel { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: var(--text2); font-size: 15px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .modal-confirm-green { flex: 2; background: var(--green); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .modal-confirm-blue { flex: 2; background: var(--blue); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-.modal-confirm-green:disabled, .modal-confirm-blue:disabled { opacity: 0.5; }
+.modal-confirm-orange { flex: 2; background: var(--orange); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.modal-confirm-green:disabled, .modal-confirm-blue:disabled, .modal-confirm-orange:disabled { opacity: 0.5; }
 
-/* Değişim form */
+/* Değişim & Stok form */
 .degisim-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .degisim-item { display: flex; gap: 8px; align-items: center; }
 .degisim-item input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
@@ -150,6 +151,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .degisim-item .remove-btn { background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text3); font-size: 16px; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .add-item-btn { background: transparent; border: 1px dashed var(--border2); border-radius: 8px; padding: 9px; color: var(--text3); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; text-align: center; }
 .add-item-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+.stok-input-wrap { margin-bottom: 16px; }
+.stok-input-wrap label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+.stok-input { width: 100%; background: var(--surface2); border: 1.5px solid var(--orange-border); border-radius: 10px; padding: 14px; font-size: 20px; color: var(--text); font-family: 'DM Mono', monospace; outline: none; -webkit-appearance: none; text-align: center; }
+.stok-input:focus { border-color: var(--orange); }
+.stok-fark { text-align: center; font-size: 13px; color: var(--text3); margin-top: 8px; }
+.stok-fark span { font-weight: 700; }
+.stok-fark span.azaldi { color: var(--red); }
+.stok-fark span.arttu { color: var(--green); }
 
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--text); z-index: 999; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -210,7 +220,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   <div class="modal">
     <div class="modal-handle"></div>
     <h3>✓ Tedarik Tamamlandı mı?</h3>
-    <p>Siparişte başka eksik ürün yoksa T-Soft'ta sipariş <strong>Nurgül Sipariş Hazır</strong> sürecine alınacak ve ürün adı nota eklenecek.</p>
+    <p>Siparişte başka eksik ürün yoksa T-Soft'ta sipariş <strong>Nurgül Sipariş Hazır</strong> sürecine alınacak.</p>
     <div class="modal-detail" id="tedarikDetail"></div>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeAllModals()">İptal</button>
@@ -226,16 +236,33 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <h3>🔄 Değişim Yapıldı</h3>
     <p>Değiştirilen ürün(ler)i girin. T-Soft'a not eklenecek ve Sheets'te güncellenecek.</p>
     <div class="modal-detail" id="degisimDetail"></div>
-    <div class="degisim-items" id="degisimItems">
-      <div class="degisim-item">
-        <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
-        <input type="number" class="adet-input" placeholder="Adet" min="1" />
-      </div>
-    </div>
+    <div class="degisim-items" id="degisimItems"></div>
     <button class="add-item-btn" onclick="addDegisimItem()">+ Ürün Ekle</button>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeAllModals()">İptal</button>
       <button class="modal-confirm-blue" id="degisimConfirm" onclick="confirmDegisim()">Değişimi Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- STOK DÜZENLEME MODAL -->
+<div class="modal-overlay" id="stokModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>📦 Stok Sayım Bildirimi</h3>
+    <p>Sayım sonucunu girin. Muhasebe grubuna bildirim gönderilecek.</p>
+    <div class="modal-detail" id="stokDetail"></div>
+    <div class="stok-input-wrap">
+      <label>Sayılan Miktar</label>
+      <input type="number" class="stok-input" id="stokInput" min="0" placeholder="0" inputmode="numeric" />
+    </div>
+    <div class="stok-input-wrap">
+      <label>Açıklama (Opsiyonel)</label>
+      <textarea id="stokAciklama" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;resize:none;min-height:70px;" placeholder="Örn: Raf B3'te bulundu, ambalaj hasarlı..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeAllModals()">İptal</button>
+      <button class="modal-confirm-orange" id="stokConfirm" onclick="confirmStok()">📤 Muhasebeye Gönder</button>
     </div>
   </div>
 </div>
@@ -245,7 +272,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <script>
 const LIST_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-listesi';
 const TAMAMLA_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-tamamla';
-const DEGISIM_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-tamamla'; // aynı webhook, tip ile ayrılır
+const TG_TOKEN = '8651784008:AAHv_nikFCrEvAWliM_09TXMfnzfXdZ2MI4';
+const TG_MUHASEBE_CHAT = '-5144681148';
+const TG_EKSIK_CHAT = '-5038862910';
 
 let allData = [];
 let currentFilter = 'hepsi';
@@ -264,20 +293,15 @@ async function loadData() {
   try {
     const res = await fetch(LIST_URL);
     allData = await res.json();
-    updateStats();
-    renderAll();
-  } catch(e) {
-    showToast('Bağlantı hatası!');
-  } finally {
-    btn.classList.remove('loading');
-  }
+    updateStats(); renderAll();
+  } catch(e) { showToast('Bağlantı hatası!'); }
+  finally { btn.classList.remove('loading'); }
 }
 
 function updateStats() {
-  const bekliyor = allData.filter(r => r['Durum'] !== 'Tedarik Edildi ✓' && r['Durum'] !== 'Değişim Yapıldı').length;
-  const tamamlandi = allData.filter(r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı').length;
-  document.getElementById('countBekliyor').textContent = bekliyor;
-  document.getElementById('countTamamlandi').textContent = tamamlandi;
+  const done = r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı';
+  document.getElementById('countBekliyor').textContent = allData.filter(r => !done(r)).length;
+  document.getElementById('countTamamlandi').textContent = allData.filter(r => done(r)).length;
   document.getElementById('countToplam').textContent = allData.length;
 }
 
@@ -288,23 +312,7 @@ function setFilter(f, el) {
   renderAll();
 }
 
-function getFiltered() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  let rows = allData;
-  const done = r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı';
-  if (currentFilter === 'bekliyor') rows = rows.filter(r => !done(r));
-  if (currentFilter === 'tamamlandi') rows = rows.filter(r => done(r));
-  if (q) rows = rows.filter(r =>
-    (r['Sipariş No'] || '').toLowerCase().includes(q) ||
-    (r['Ürün Adı'] || '').toLowerCase().includes(q) ||
-    (r['Not'] || '').toLowerCase().includes(q)
-  );
-  return rows;
-}
-
-function isDone(row) {
-  return row['Durum'] === 'Tedarik Edildi ✓' || row['Durum'] === 'Değişim Yapıldı';
-}
+function isDone(row) { return row['Durum'] === 'Tedarik Edildi ✓' || row['Durum'] === 'Değişim Yapıldı'; }
 
 function getBadge(row) {
   if (row['Durum'] === 'Tedarik Edildi ✓') return `<span class="badge badge-tamamlandi"><span class="badge-dot"></span>Tamamlandı</span>`;
@@ -313,12 +321,29 @@ function getBadge(row) {
 }
 
 function getActionBtns(satirNo, row) {
-  if (isDone(row)) return `<button class="btn btn-ghost" disabled>✓ ${row['Durum']}</button>`;
-  const rowJson = JSON.stringify(row).replace(/'/g, '&#39;');
+  const rj = JSON.stringify(row).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+  if (isDone(row)) {
+    return `
+      <button class="btn btn-ghost" disabled>✓ ${row['Durum']}</button>
+      <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>📦 Stok</button>`;
+  }
   return `
-    <button class="btn btn-green" onclick='openTedarikModal(${satirNo}, ${rowJson})'>Tedarik Edildi</button>
-    <button class="btn btn-blue" onclick='openDegisimModal(${satirNo}, ${rowJson})'>Değişim Yapıldı</button>
-  `;
+    <button class="btn btn-green" onclick='openTedarikModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>Tedarik Edildi</button>
+    <button class="btn btn-blue" onclick='openDegisimModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>Değişim</button>
+    <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>📦 Stok</button>`;
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let rows = allData;
+  if (currentFilter === 'bekliyor') rows = rows.filter(r => !isDone(r));
+  if (currentFilter === 'tamamlandi') rows = rows.filter(r => isDone(r));
+  if (q) rows = rows.filter(r =>
+    (r['Sipariş No'] || '').toLowerCase().includes(q) ||
+    (r['Ürün Adı'] || '').toLowerCase().includes(q) ||
+    (r['Not'] || '').toLowerCase().includes(q)
+  );
+  return rows;
 }
 
 function renderAll() {
@@ -329,16 +354,11 @@ function renderAll() {
     document.getElementById('desktopTable').innerHTML = empty;
     return;
   }
-
   document.getElementById('mobileCards').innerHTML = rows.map(row => {
     const satirNo = row.satirNo;
-    return `
-    <div class="card ${isDone(row) ? 'done' : ''}">
+    return `<div class="card ${isDone(row) ? 'done' : ''}">
       <div class="card-top">
-        <div class="card-head">
-          <div class="card-siparis">${row['Sipariş No'] || '-'}</div>
-          ${getBadge(row)}
-        </div>
+        <div class="card-head"><div class="card-siparis">${row['Sipariş No'] || '-'}</div>${getBadge(row)}</div>
         <div class="card-urun">${row['Ürün Adı'] || '-'}</div>
         ${row['Not'] ? `<div class="card-not">${row['Not']}</div>` : ''}
         <div class="card-meta">
@@ -355,8 +375,7 @@ function renderAll() {
 
   document.getElementById('desktopTable').innerHTML = rows.map(row => {
     const satirNo = row.satirNo;
-    return `
-    <div class="table-row ${isDone(row) ? 'done' : ''}">
+    return `<div class="table-row ${isDone(row) ? 'done' : ''}">
       <div class="col-siparis">${row['Sipariş No'] || '-'}</div>
       <div class="col-urun">${row['Ürün Adı'] || '-'}${row['Not'] ? `<small>${row['Not']}</small>` : ''}</div>
       <div class="col-num eksik">${row['Eksik Miktar'] || '-'}</div>
@@ -368,7 +387,7 @@ function renderAll() {
   }).join('');
 }
 
-/* ====== TEDARİK MODAL ====== */
+/* ====== TEDARİK ====== */
 function openTedarikModal(satirNo, row) {
   selectedRow = { satirNo, row };
   document.getElementById('tedarikDetail').innerHTML = `
@@ -376,47 +395,34 @@ function openTedarikModal(satirNo, row) {
     <div class="mrow"><span class="mkey">Eksik Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>
     <div class="mrow"><span class="mkey">Eksik Miktar</span><span class="mval">${row['Eksik Miktar'] || '-'} adet</span></div>
     <div class="mrow"><span class="mkey">Rafta</span><span class="mval">${row['Mevcut Miktar'] || '-'} adet</span></div>
-    ${row['Not'] ? `<div class="mrow"><span class="mkey">Not</span><span class="mval">${row['Not']}</span></div>` : ''}
-  `;
+    ${row['Not'] ? `<div class="mrow"><span class="mkey">Not</span><span class="mval">${row['Not']}</span></div>` : ''}`;
   document.getElementById('tedarikModal').classList.add('show');
 }
 
 async function confirmTedarik() {
   if (!selectedRow) return;
   const btn = document.getElementById('tedarikConfirm');
-  btn.disabled = true;
-  btn.textContent = 'İşleniyor...';
+  btn.disabled = true; btn.textContent = 'İşleniyor...';
   try {
     fetch(TAMAMLA_URL, {
-      method: 'POST',
-      mode: 'no-cors',
+      method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tip: 'tedarik',
-        siparisNo: selectedRow.row['Sipariş No'],
-        satirNo: selectedRow.satirNo,
-        urunAdi: selectedRow.row['Ürün Adı']
-      })
+      body: JSON.stringify({ tip: 'tedarik', siparisNo: selectedRow.row['Sipariş No'], satirNo: selectedRow.satirNo, urunAdi: selectedRow.row['Ürün Adı'] })
     });
     await new Promise(r => setTimeout(r, 600));
     const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
     if (idx !== -1) allData[idx]['Durum'] = 'Tedarik Edildi ✓';
     updateStats(); renderAll(); closeAllModals();
     showToast('✓ Tedarik tamamlandı!');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Evet, Tamamlandı ✓';
-  }
+  } finally { btn.disabled = false; btn.textContent = 'Evet, Tamamlandı ✓'; }
 }
 
-/* ====== DEĞİŞİM MODAL ====== */
+/* ====== DEĞİŞİM ====== */
 function openDegisimModal(satirNo, row) {
   selectedRow = { satirNo, row };
   document.getElementById('degisimDetail').innerHTML = `
     <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${row['Sipariş No'] || '-'}</span></div>
-    <div class="mrow"><span class="mkey">Orijinal Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>
-  `;
-  // Reset items
+    <div class="mrow"><span class="mkey">Orijinal Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>`;
   document.getElementById('degisimItems').innerHTML = `
     <div class="degisim-item">
       <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
@@ -427,19 +433,14 @@ function openDegisimModal(satirNo, row) {
 }
 
 function addDegisimItem() {
-  const container = document.getElementById('degisimItems');
   const div = document.createElement('div');
   div.className = 'degisim-item';
-  div.innerHTML = `
-    <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
-    <input type="number" class="adet-input" placeholder="Adet" min="1" />
-    <button class="remove-btn" onclick="removeDegisimItem(this)">×</button>`;
-  container.appendChild(div);
+  div.innerHTML = `<input type="text" class="urun-input" placeholder="Yeni ürün adı..." /><input type="number" class="adet-input" placeholder="Adet" min="1" /><button class="remove-btn" onclick="removeDegisimItem(this)">×</button>`;
+  document.getElementById('degisimItems').appendChild(div);
 }
 
 function removeDegisimItem(btn) {
-  const items = document.querySelectorAll('.degisim-item');
-  if (items.length > 1) btn.parentElement.remove();
+  if (document.querySelectorAll('.degisim-item').length > 1) btn.parentElement.remove();
 }
 
 async function confirmDegisim() {
@@ -454,42 +455,69 @@ async function confirmDegisim() {
     yeniUrunler.push({ urun, adet });
   });
   if (!valid || yeniUrunler.length === 0) { showToast('Ürün adı ve adet zorunlu!'); return; }
-
   const btn = document.getElementById('degisimConfirm');
-  btn.disabled = true;
-  btn.textContent = 'Kaydediliyor...';
+  btn.disabled = true; btn.textContent = 'Kaydediliyor...';
   try {
-    fetch(DEGISIM_URL, {
-      method: 'POST',
-      mode: 'no-cors',
+    fetch(TAMAMLA_URL, {
+      method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tip: 'degisim',
-        siparisNo: selectedRow.row['Sipariş No'],
-        satirNo: selectedRow.satirNo,
-        orijinalUrun: selectedRow.row['Ürün Adı'],
-        yeniUrunler
-      })
+      body: JSON.stringify({ tip: 'degisim', siparisNo: selectedRow.row['Sipariş No'], satirNo: selectedRow.satirNo, orijinalUrun: selectedRow.row['Ürün Adı'], yeniUrunler })
     });
     await new Promise(r => setTimeout(r, 600));
     const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
     if (idx !== -1) allData[idx]['Durum'] = 'Değişim Yapıldı';
     updateStats(); renderAll(); closeAllModals();
     showToast('🔄 Değişim kaydedildi!');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Değişimi Kaydet';
-  }
+  } finally { btn.disabled = false; btn.textContent = 'Değişimi Kaydet'; }
+}
+
+/* ====== STOK DÜZENLEME ====== */
+function openStokModal(satirNo, row) {
+  selectedRow = { satirNo, row };
+  document.getElementById('stokDetail').innerHTML = `
+    <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${row['Sipariş No'] || '-'}</span></div>
+    <div class="mrow"><span class="mkey">Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>`;
+  document.getElementById('stokInput').value = '';
+  document.getElementById('stokAciklama').value = '';
+  document.getElementById('stokModal').classList.add('show');
+  setTimeout(() => document.getElementById('stokInput').focus(), 400);
+}
+
+async function confirmStok() {
+  if (!selectedRow) return;
+  const sayilanMiktar = parseInt(document.getElementById('stokInput').value);
+  const aciklama = document.getElementById('stokAciklama').value.trim();
+  if (isNaN(sayilanMiktar) || sayilanMiktar < 0) { showToast('Geçerli bir miktar girin!'); return; }
+  const btn = document.getElementById('stokConfirm');
+  btn.disabled = true; btn.textContent = 'Gönderiliyor...';
+  try {
+    const mesaj = `📦 *STOK SAYIM BİLDİRİMİ*\n\n` +
+      `🧶 *Ürün:* ${selectedRow.row['Ürün Adı'] || '-'}\n` +
+      `🔢 *Sayılan Miktar:* ${sayilanMiktar} adet\n` +
+      (aciklama ? `📝 *Açıklama:* ${aciklama}\n` : '') +
+      `\n📅 ${new Date().toLocaleDateString('tr-TR')} ${new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}`;
+
+    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_MUHASEBE_CHAT, text: mesaj, parse_mode: 'Markdown' })
+    });
+
+    closeAllModals();
+    showToast('📤 Muhasebe grubuna gönderildi!');
+  } catch(e) {
+    showToast('Hata oluştu. Tekrar deneyin.');
+  } finally { btn.disabled = false; btn.textContent = '📤 Muhasebeye Gönder'; }
 }
 
 function closeAllModals() {
-  document.getElementById('tedarikModal').classList.remove('show');
-  document.getElementById('degisimModal').classList.remove('show');
+  ['tedarikModal','degisimModal','stokModal'].forEach(id => document.getElementById(id).classList.remove('show'));
   selectedRow = null;
 }
 
-document.getElementById('tedarikModal').addEventListener('click', e => { if (e.target === document.getElementById('tedarikModal')) closeAllModals(); });
-document.getElementById('degisimModal').addEventListener('click', e => { if (e.target === document.getElementById('degisimModal')) closeAllModals(); });
+['tedarikModal','degisimModal','stokModal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => { if (e.target === document.getElementById(id)) closeAllModals(); });
+});
 
 loadData();
 setInterval(loadData, 120000);

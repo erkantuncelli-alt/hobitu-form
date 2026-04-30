@@ -20,20 +20,19 @@
   --green-bg: #0f2318;
   --green-border: #166534;
   --red: #ef4444;
+  --blue: #3b82f6;
+  --blue-bg: #0f1829;
+  --blue-border: #1e3a5f;
+  --purple: #a855f7;
+  --purple-bg: #1a0f29;
+  --purple-border: #4a1f7a;
   --yellow: #eab308;
   --yellow-bg: #1f1a00;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* HEADER */
-.header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 50;
-}
+.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .brand-icon svg { width: 17px; height: 17px; fill: white; }
@@ -44,19 +43,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .refresh-btn.loading svg { animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* STATS BAR */
-.stats-bar {
-  display: flex; gap: 8px; padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
+.stats-bar { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); }
 .stat { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; text-align: center; }
 .stat-num { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; }
 .stat-num.red { color: var(--red); }
 .stat-num.green { color: var(--green); }
 .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
 
-/* FILTERS */
 .filters { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
 .filter-tabs { display: flex; gap: 6px; }
 .filter-btn { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 4px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: center; transition: all 0.15s; }
@@ -67,42 +60,41 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .search-input::placeholder { color: var(--text3); }
 .search-input:focus { border-color: var(--accent); }
 
-/* CARDS */
 .cards { padding: 0 16px 24px; display: flex; flex-direction: column; gap: 10px; }
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .card.done { opacity: 0.5; }
+.card.degisim { border-color: var(--blue-border); }
 .card-top { padding: 14px 14px 10px; }
 .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 .card-siparis { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); }
 .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 .badge-bekliyor { background: var(--yellow-bg); color: var(--yellow); border: 1px solid #3a2e00; }
 .badge-tamamlandi { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.badge-degisim { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .card-urun { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .card-not { font-size: 12px; color: var(--text3); margin-bottom: 10px; font-style: italic; }
 .card-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 .meta-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; }
 .meta-pill.eksik { color: var(--red); border-color: #3a1515; background: #1f0f0f; }
-.card-bottom { border-top: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
-.card-tarih { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
-.tedarik-btn { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 8px; padding: 8px 16px; color: var(--green); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
-.tedarik-btn:active { opacity: 0.8; }
-.tedarik-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.tedarik-btn.done-btn { background: transparent; border-color: var(--border); color: var(--text3); cursor: default; font-size: 12px; }
+.card-bottom { border-top: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.card-tarih { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; flex-shrink: 0; }
+.card-btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.btn { border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; border: 1px solid; white-space: nowrap; }
+.btn:active { opacity: 0.8; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.btn-blue { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+.btn-purple { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); }
+.btn-ghost { background: transparent; border-color: var(--border); color: var(--text3); cursor: default; }
 
 /* EMPTY */
 .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 12px; color: var(--text3); text-align: center; }
 .empty-state svg { width: 36px; height: 36px; opacity: 0.3; }
 .empty-state p { font-size: 14px; }
 
-/* DESKTOP TABLE */
+/* DESKTOP */
 @media (min-width: 768px) {
   .cards { display: none; }
   .table-section { display: block; padding: 0 24px 24px; }
@@ -113,48 +105,52 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   .stats-bar { padding: 12px 24px; }
   .header { padding: 0 24px; height: 60px; }
 }
-@media (max-width: 767px) {
-  .table-section { display: none; }
-}
+@media (max-width: 767px) { .table-section { display: none; } }
 
-/* TABLE (desktop) */
 .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.table-header { display: grid; grid-template-columns: 130px 1fr 70px 80px 110px 85px 150px; padding: 12px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); font-family: 'DM Mono', monospace; }
-.table-row { display: grid; grid-template-columns: 130px 1fr 70px 80px 110px 85px 150px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.1s; }
+.table-header { display: grid; grid-template-columns: 120px 1fr 60px 70px 100px 85px 1fr; padding: 12px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); font-family: 'DM Mono', monospace; }
+.table-row { display: grid; grid-template-columns: 120px 1fr 60px 70px 100px 85px 1fr; padding: 12px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.1s; gap: 8px; }
 .table-row:last-child { border-bottom: none; }
 .table-row:hover { background: var(--surface2); }
 .table-row.done { opacity: 0.45; }
 .col-siparis { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); }
-.col-urun { font-size: 14px; color: var(--text); font-weight: 500; padding-right: 12px; }
+.col-urun { font-size: 13px; color: var(--text); font-weight: 500; }
 .col-urun small { display: block; font-size: 11px; color: var(--text3); margin-top: 2px; }
 .col-num { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
 .col-num.eksik { color: var(--red); font-weight: 500; }
 .col-tarih { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; }
-.col-action { display: flex; justify-content: flex-end; }
-.dt-tedarik-btn { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 8px; padding: 7px 14px; color: var(--green); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: all 0.15s; }
-.dt-tedarik-btn:hover { background: #14391f; }
-.dt-tedarik-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.dt-tedarik-btn.done-btn { background: transparent; border-color: var(--border); color: var(--text3); cursor: default; }
+.col-action { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
 
 /* MODAL */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; padding: 0; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
 .modal-overlay.show { opacity: 1; pointer-events: all; }
-.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 20px 20px 0 0; padding: 24px 20px 36px; width: 100%; max-width: 500px; transform: translateY(100%); transition: transform 0.25s; }
+.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 20px 20px 0 0; padding: 24px 20px 36px; width: 100%; max-width: 500px; transform: translateY(100%); transition: transform 0.25s; max-height: 90vh; overflow-y: auto; }
 .modal-overlay.show .modal { transform: translateY(0); }
 .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 20px; }
 .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
 .modal p { font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.5; }
-.modal-detail { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; }
+.modal-detail { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
 .modal-detail .mrow { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
 .modal-detail .mrow:last-child { border-bottom: none; }
 .modal-detail .mkey { font-size: 12px; color: var(--text3); }
 .modal-detail .mval { font-size: 13px; color: var(--text); font-weight: 500; font-family: 'DM Mono', monospace; text-align: right; max-width: 60%; }
-.modal-btns { display: flex; gap: 10px; }
+.modal-btns { display: flex; gap: 10px; margin-top: 16px; }
 .modal-cancel { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: var(--text2); font-size: 15px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-.modal-confirm { flex: 2; background: var(--green); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-.modal-confirm:disabled { opacity: 0.5; }
+.modal-confirm-green { flex: 2; background: var(--green); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.modal-confirm-blue { flex: 2; background: var(--blue); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.modal-confirm-green:disabled, .modal-confirm-blue:disabled { opacity: 0.5; }
 
-/* TOAST */
+/* Değişim form */
+.degisim-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.degisim-item { display: flex; gap: 8px; align-items: center; }
+.degisim-item input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
+.degisim-item input:focus { border-color: var(--blue); }
+.degisim-item .urun-input { flex: 1; }
+.degisim-item .adet-input { width: 80px; }
+.degisim-item .remove-btn { background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text3); font-size: 16px; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.add-item-btn { background: transparent; border: 1px dashed var(--border2); border-radius: 8px; padding: 9px; color: var(--text3); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; text-align: center; }
+.add-item-btn:hover { border-color: var(--blue); color: var(--blue); }
+
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--text); z-index: 999; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
@@ -181,18 +177,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 </div>
 
 <div class="stats-bar">
-  <div class="stat">
-    <div class="stat-num red" id="countBekliyor">-</div>
-    <div class="stat-label">Bekliyor</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num green" id="countTamamlandi">-</div>
-    <div class="stat-label">Tamamlandı</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num" id="countToplam">-</div>
-    <div class="stat-label">Toplam</div>
-  </div>
+  <div class="stat"><div class="stat-num red" id="countBekliyor">-</div><div class="stat-label">Bekliyor</div></div>
+  <div class="stat"><div class="stat-num green" id="countTamamlandi">-</div><div class="stat-label">Tamamlandı</div></div>
+  <div class="stat"><div class="stat-num" id="countToplam">-</div><div class="stat-label">Toplam</div></div>
 </div>
 
 <div class="filters">
@@ -207,10 +194,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   </div>
 </div>
 
-<!-- MOBILE CARDS -->
 <div class="cards" id="mobileCards"></div>
 
-<!-- DESKTOP TABLE -->
 <div class="table-section">
   <div class="table-wrap">
     <div class="table-header">
@@ -220,16 +205,37 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
+<!-- TEDARİK MODAL -->
+<div class="modal-overlay" id="tedarikModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>Tedarik Tamamlandı mı?</h3>
-    <p>Siparişte başka eksik ürün yoksa T-Soft'ta sipariş <strong>Nurgül Sipariş Hazır</strong> sürecine alınacak ve not eklenecek.</p>
-    <div class="modal-detail" id="modalDetail"></div>
+    <h3>✓ Tedarik Tamamlandı mı?</h3>
+    <p>Siparişte başka eksik ürün yoksa T-Soft'ta sipariş <strong>Nurgül Sipariş Hazır</strong> sürecine alınacak ve ürün adı nota eklenecek.</p>
+    <div class="modal-detail" id="tedarikDetail"></div>
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal()">İptal</button>
-      <button class="modal-confirm" id="modalConfirm" onclick="confirmTedarik()">Evet, Tamamlandı ✓</button>
+      <button class="modal-cancel" onclick="closeAllModals()">İptal</button>
+      <button class="modal-confirm-green" id="tedarikConfirm" onclick="confirmTedarik()">Evet, Tamamlandı ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEĞİŞİM MODAL -->
+<div class="modal-overlay" id="degisimModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>🔄 Değişim Yapıldı</h3>
+    <p>Değiştirilen ürün(ler)i girin. T-Soft'a not eklenecek ve Sheets'te güncellenecek.</p>
+    <div class="modal-detail" id="degisimDetail"></div>
+    <div class="degisim-items" id="degisimItems">
+      <div class="degisim-item">
+        <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
+        <input type="number" class="adet-input" placeholder="Adet" min="1" />
+      </div>
+    </div>
+    <button class="add-item-btn" onclick="addDegisimItem()">+ Ürün Ekle</button>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeAllModals()">İptal</button>
+      <button class="modal-confirm-blue" id="degisimConfirm" onclick="confirmDegisim()">Değişimi Kaydet</button>
     </div>
   </div>
 </div>
@@ -239,6 +245,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <script>
 const LIST_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-listesi';
 const TAMAMLA_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-tamamla';
+const DEGISIM_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-tamamla'; // aynı webhook, tip ile ayrılır
+
 let allData = [];
 let currentFilter = 'hepsi';
 let selectedRow = null;
@@ -260,15 +268,14 @@ async function loadData() {
     renderAll();
   } catch(e) {
     showToast('Bağlantı hatası!');
-    renderEmpty();
   } finally {
     btn.classList.remove('loading');
   }
 }
 
 function updateStats() {
-  const bekliyor = allData.filter(r => r['Durum'] !== 'Tedarik Edildi ✓').length;
-  const tamamlandi = allData.filter(r => r['Durum'] === 'Tedarik Edildi ✓').length;
+  const bekliyor = allData.filter(r => r['Durum'] !== 'Tedarik Edildi ✓' && r['Durum'] !== 'Değişim Yapıldı').length;
+  const tamamlandi = allData.filter(r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı').length;
   document.getElementById('countBekliyor').textContent = bekliyor;
   document.getElementById('countTamamlandi').textContent = tamamlandi;
   document.getElementById('countToplam').textContent = allData.length;
@@ -284,8 +291,9 @@ function setFilter(f, el) {
 function getFiltered() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let rows = allData;
-  if (currentFilter === 'bekliyor') rows = rows.filter(r => r['Durum'] !== 'Tedarik Edildi ✓');
-  if (currentFilter === 'tamamlandi') rows = rows.filter(r => r['Durum'] === 'Tedarik Edildi ✓');
+  const done = r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı';
+  if (currentFilter === 'bekliyor') rows = rows.filter(r => !done(r));
+  if (currentFilter === 'tamamlandi') rows = rows.filter(r => done(r));
   if (q) rows = rows.filter(r =>
     (r['Sipariş No'] || '').toLowerCase().includes(q) ||
     (r['Ürün Adı'] || '').toLowerCase().includes(q) ||
@@ -294,31 +302,42 @@ function getFiltered() {
   return rows;
 }
 
+function isDone(row) {
+  return row['Durum'] === 'Tedarik Edildi ✓' || row['Durum'] === 'Değişim Yapıldı';
+}
+
+function getBadge(row) {
+  if (row['Durum'] === 'Tedarik Edildi ✓') return `<span class="badge badge-tamamlandi"><span class="badge-dot"></span>Tamamlandı</span>`;
+  if (row['Durum'] === 'Değişim Yapıldı') return `<span class="badge badge-degisim"><span class="badge-dot"></span>Değişim</span>`;
+  return `<span class="badge badge-bekliyor"><span class="badge-dot"></span>Bekliyor</span>`;
+}
+
+function getActionBtns(satirNo, row) {
+  if (isDone(row)) return `<button class="btn btn-ghost" disabled>✓ ${row['Durum']}</button>`;
+  const rowJson = JSON.stringify(row).replace(/'/g, '&#39;');
+  return `
+    <button class="btn btn-green" onclick='openTedarikModal(${satirNo}, ${rowJson})'>Tedarik Edildi</button>
+    <button class="btn btn-blue" onclick='openDegisimModal(${satirNo}, ${rowJson})'>Değişim Yapıldı</button>
+  `;
+}
+
 function renderAll() {
   const rows = getFiltered();
-  if (rows.length === 0) { renderEmpty(); return; }
-  renderMobile(rows);
-  renderDesktop(rows);
-}
+  if (rows.length === 0) {
+    const empty = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Kayıt bulunamadı</p></div>`;
+    document.getElementById('mobileCards').innerHTML = empty;
+    document.getElementById('desktopTable').innerHTML = empty;
+    return;
+  }
 
-function renderEmpty() {
-  const empty = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Kayıt bulunamadı</p></div>`;
-  document.getElementById('mobileCards').innerHTML = empty;
-  document.getElementById('desktopTable').innerHTML = empty;
-}
-
-function renderMobile(rows) {
   document.getElementById('mobileCards').innerHTML = rows.map(row => {
-    const done = row['Durum'] === 'Tedarik Edildi ✓';
     const satirNo = row.satirNo;
     return `
-    <div class="card ${done ? 'done' : ''}">
+    <div class="card ${isDone(row) ? 'done' : ''}">
       <div class="card-top">
         <div class="card-head">
           <div class="card-siparis">${row['Sipariş No'] || '-'}</div>
-          ${done
-            ? `<span class="badge badge-tamamlandi"><span class="badge-dot"></span>Tamamlandı</span>`
-            : `<span class="badge badge-bekliyor"><span class="badge-dot"></span>Bekliyor</span>`}
+          ${getBadge(row)}
         </div>
         <div class="card-urun">${row['Ürün Adı'] || '-'}</div>
         ${row['Not'] ? `<div class="card-not">${row['Not']}</div>` : ''}
@@ -329,81 +348,149 @@ function renderMobile(rows) {
       </div>
       <div class="card-bottom">
         <div class="card-tarih">${row['Tarih'] || '-'}</div>
-        ${done
-          ? `<button class="tedarik-btn done-btn" disabled>✓ Tamamlandı</button>`
-          : `<button class="tedarik-btn" onclick='openModal(${satirNo}, ${JSON.stringify(row)})'>Tedarik Edildi</button>`}
+        <div class="card-btns">${getActionBtns(satirNo, row)}</div>
       </div>
     </div>`;
   }).join('');
-}
 
-function renderDesktop(rows) {
   document.getElementById('desktopTable').innerHTML = rows.map(row => {
-    const done = row['Durum'] === 'Tedarik Edildi ✓';
     const satirNo = row.satirNo;
     return `
-    <div class="table-row ${done ? 'done' : ''}">
+    <div class="table-row ${isDone(row) ? 'done' : ''}">
       <div class="col-siparis">${row['Sipariş No'] || '-'}</div>
       <div class="col-urun">${row['Ürün Adı'] || '-'}${row['Not'] ? `<small>${row['Not']}</small>` : ''}</div>
       <div class="col-num eksik">${row['Eksik Miktar'] || '-'}</div>
       <div class="col-num">${row['Mevcut Miktar'] || '-'}</div>
       <div class="col-tarih">${row['Tarih'] || '-'}</div>
-      <div>${done ? `<span class="badge badge-tamamlandi"><span class="badge-dot"></span>Tamamlandı</span>` : `<span class="badge badge-bekliyor"><span class="badge-dot"></span>Bekliyor</span>`}</div>
-      <div class="col-action">${done
-        ? `<button class="dt-tedarik-btn done-btn" disabled>✓ Tamamlandı</button>`
-        : `<button class="dt-tedarik-btn" onclick='openModal(${satirNo}, ${JSON.stringify(row)})'>Tedarik Edildi</button>`}
-      </div>
+      <div>${getBadge(row)}</div>
+      <div class="col-action">${getActionBtns(satirNo, row)}</div>
     </div>`;
   }).join('');
 }
 
-function openModal(satirNo, row) {
+/* ====== TEDARİK MODAL ====== */
+function openTedarikModal(satirNo, row) {
   selectedRow = { satirNo, row };
-  document.getElementById('modalDetail').innerHTML = `
+  document.getElementById('tedarikDetail').innerHTML = `
     <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${row['Sipariş No'] || '-'}</span></div>
     <div class="mrow"><span class="mkey">Eksik Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>
     <div class="mrow"><span class="mkey">Eksik Miktar</span><span class="mval">${row['Eksik Miktar'] || '-'} adet</span></div>
     <div class="mrow"><span class="mkey">Rafta</span><span class="mval">${row['Mevcut Miktar'] || '-'} adet</span></div>
     ${row['Not'] ? `<div class="mrow"><span class="mkey">Not</span><span class="mval">${row['Not']}</span></div>` : ''}
   `;
-  document.getElementById('modal').classList.add('show');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
-  selectedRow = null;
+  document.getElementById('tedarikModal').classList.add('show');
 }
 
 async function confirmTedarik() {
   if (!selectedRow) return;
-  const btn = document.getElementById('modalConfirm');
+  const btn = document.getElementById('tedarikConfirm');
   btn.disabled = true;
   btn.textContent = 'İşleniyor...';
-  
   try {
     fetch(TAMAMLA_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ siparisNo: selectedRow.row['Sipariş No'], satirNo: selectedRow.satirNo })
+      body: JSON.stringify({
+        tip: 'tedarik',
+        siparisNo: selectedRow.row['Sipariş No'],
+        satirNo: selectedRow.satirNo,
+        urunAdi: selectedRow.row['Ürün Adı']
+      })
     });
-
-    // no-cors ile yanıt okunamaz, 500ms bekleyip başarılı say
-    await new Promise(r => setTimeout(r, 500));
-
+    await new Promise(r => setTimeout(r, 600));
     const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
     if (idx !== -1) allData[idx]['Durum'] = 'Tedarik Edildi ✓';
-    updateStats();
-    renderAll();
-    closeModal();
-    showToast('✓ ' + selectedRow.row['Sipariş No'] + ' tamamlandı!');
+    updateStats(); renderAll(); closeAllModals();
+    showToast('✓ Tedarik tamamlandı!');
   } finally {
     btn.disabled = false;
     btn.textContent = 'Evet, Tamamlandı ✓';
   }
 }
 
-document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+/* ====== DEĞİŞİM MODAL ====== */
+function openDegisimModal(satirNo, row) {
+  selectedRow = { satirNo, row };
+  document.getElementById('degisimDetail').innerHTML = `
+    <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${row['Sipariş No'] || '-'}</span></div>
+    <div class="mrow"><span class="mkey">Orijinal Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>
+  `;
+  // Reset items
+  document.getElementById('degisimItems').innerHTML = `
+    <div class="degisim-item">
+      <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
+      <input type="number" class="adet-input" placeholder="Adet" min="1" />
+      <button class="remove-btn" onclick="removeDegisimItem(this)">×</button>
+    </div>`;
+  document.getElementById('degisimModal').classList.add('show');
+}
+
+function addDegisimItem() {
+  const container = document.getElementById('degisimItems');
+  const div = document.createElement('div');
+  div.className = 'degisim-item';
+  div.innerHTML = `
+    <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
+    <input type="number" class="adet-input" placeholder="Adet" min="1" />
+    <button class="remove-btn" onclick="removeDegisimItem(this)">×</button>`;
+  container.appendChild(div);
+}
+
+function removeDegisimItem(btn) {
+  const items = document.querySelectorAll('.degisim-item');
+  if (items.length > 1) btn.parentElement.remove();
+}
+
+async function confirmDegisim() {
+  if (!selectedRow) return;
+  const items = document.querySelectorAll('.degisim-item');
+  const yeniUrunler = [];
+  let valid = true;
+  items.forEach(item => {
+    const urun = item.querySelector('.urun-input').value.trim();
+    const adet = item.querySelector('.adet-input').value.trim();
+    if (!urun || !adet) { valid = false; return; }
+    yeniUrunler.push({ urun, adet });
+  });
+  if (!valid || yeniUrunler.length === 0) { showToast('Ürün adı ve adet zorunlu!'); return; }
+
+  const btn = document.getElementById('degisimConfirm');
+  btn.disabled = true;
+  btn.textContent = 'Kaydediliyor...';
+  try {
+    fetch(DEGISIM_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tip: 'degisim',
+        siparisNo: selectedRow.row['Sipariş No'],
+        satirNo: selectedRow.satirNo,
+        orijinalUrun: selectedRow.row['Ürün Adı'],
+        yeniUrunler
+      })
+    });
+    await new Promise(r => setTimeout(r, 600));
+    const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
+    if (idx !== -1) allData[idx]['Durum'] = 'Değişim Yapıldı';
+    updateStats(); renderAll(); closeAllModals();
+    showToast('🔄 Değişim kaydedildi!');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Değişimi Kaydet';
+  }
+}
+
+function closeAllModals() {
+  document.getElementById('tedarikModal').classList.remove('show');
+  document.getElementById('degisimModal').classList.remove('show');
+  selectedRow = null;
+}
+
+document.getElementById('tedarikModal').addEventListener('click', e => { if (e.target === document.getElementById('tedarikModal')) closeAllModals(); });
+document.getElementById('degisimModal').addEventListener('click', e => { if (e.target === document.getElementById('degisimModal')) closeAllModals(); });
+
 loadData();
 setInterval(loadData, 120000);
 </script>

@@ -230,7 +230,7 @@
     if (!d) { errorMsg.style.display = "block"; return; }
 
     const imgUrl = d.MainProductImageUrl || d.ImageUrl || "";
-    document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + imgUrl;
+    document.getElementById("res-img").src = "https://www.hobitu.com/images/" + imgUrl;
     document.getElementById("res-name").textContent = d.ProductName || "Ürün Bulunamadı";
     document.getElementById("res-cat").textContent = d.DefaultCategoryPath || "";
 

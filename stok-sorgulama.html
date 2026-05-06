@@ -89,6 +89,8 @@
   <img id="res-img" src="" onerror="this.src='https://cdn-icons-png.flaticon.com/512/679/679821.png'">
   <h2 id="res-name"></h2>
   <p class="category" id="res-cat"></p>
+  <div class="info-row" id="row-renk" style="display:none"><span class="label">🎨 Renk</span><span class="value" id="res-renk"></span></div>
+  <div class="info-row" id="row-beden" style="display:none"><span class="label">📐 Beden</span><span class="value" id="res-beden"></span></div>
   <div class="info-row"><span class="label">📦 Stok</span><span class="value" id="res-stock"></span></div>
   <div class="info-row"><span class="label">💰 Fiyat (KDV dahil)</span><span class="value" id="res-price"></span></div>
   <div class="info-row"><span class="label">Barkod</span><span class="value" id="res-barcode"></span></div>
@@ -226,14 +228,31 @@
   function renderResult(data) {
     const d = data?.data?.[0] || data?.body?.data?.[0] || data?.[0];
     if (!d) { errorMsg.style.display = "block"; return; }
-    document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + (d.ImageUrl || "");
+
+    const imgUrl = d.MainProductImageUrl || d.ImageUrl || "";
+    document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + imgUrl;
     document.getElementById("res-name").textContent = d.ProductName || "Ürün Bulunamadı";
     document.getElementById("res-cat").textContent = d.DefaultCategoryPath || "";
+
+    if (d.Property1) {
+      document.getElementById("res-renk").textContent = d.Property1;
+      document.getElementById("row-renk").style.display = "flex";
+    } else {
+      document.getElementById("row-renk").style.display = "none";
+    }
+    if (d.Property2) {
+      document.getElementById("res-beden").textContent = d.Property2;
+      document.getElementById("row-beden").style.display = "flex";
+    } else {
+      document.getElementById("row-beden").style.display = "none";
+    }
+
     const stock = parseInt(d.Stock) || 0;
     const stockEl = document.getElementById("res-stock");
     stockEl.textContent = stock + " Adet";
     stockEl.className = "value " + (stock > 0 ? "stock-ok" : "stock-out");
-    const price = parseFloat(d.SellingPriceVatIncluded) || 0;
+
+    const price = parseFloat(d.VatIncludedPriceTL || d.SellingPriceVatIncluded) || 0;
     document.getElementById("res-price").textContent = price.toFixed(2) + " TL";
     document.getElementById("res-barcode").textContent = d.Barcode || "-";
     resultCard.style.display = "block";

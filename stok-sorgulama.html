@@ -228,9 +228,6 @@
   function renderResult(data) {
     const d = data?.data?.[0] || data?.body?.data?.[0] || data?.[0];
     if (!d) { errorMsg.style.display = "block"; return; }
-   function renderResult(data) {
-    console.log("API yanıtı:", JSON.stringify(data));  // ← BU SATIRI EKLE
-    const d = data?.data?.[0] || data?.body?.data?.[0] || data?.[0];
 
     const imgUrl = d.MainProductImageUrl || d.ImageUrl || "";
     document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + imgUrl;

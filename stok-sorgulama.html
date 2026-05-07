@@ -11,24 +11,24 @@
   h1 { font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 6px; }
   .subtitle { font-size: 14px; color: #888; margin-bottom: 24px; }
   .card { background: #fff; border-radius: 16px; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 24px; width: 100%; max-width: 420px; }
-  .input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+  .input-group { display: flex; gap: 8px; margin-bottom: 8px; }
   input[type="text"] { flex: 1; border: 1px solid #ddd; border-radius: 10px; padding: 12px 14px; font-size: 16px; outline: none; }
   input[type="text"]:focus { border-color: #e8604c; }
-  .btn-scan { background: #2c3e50; color: #fff; border: none; border-radius: 10px; padding: 0 16px; font-size: 22px; cursor: pointer; flex-shrink: 0; }
+  .btn-scan { background: #2c3e50; color: #fff; border: none; border-radius: 10px; padding: 0 14px; font-size: 20px; cursor: pointer; flex-shrink: 0; }
+  .btn-photo { width: 100%; background: #34495e; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .btn-submit { width: 100%; background: #e8604c; color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 4px; }
-  #camera-wrapper { display: none; margin-top: 16px; border-radius: 14px; overflow: hidden; border: 2px solid #e8604c; background: #000; position: relative; }
+  #file-input { display: none; }
+  #camera-wrapper { display: none; margin-top: 12px; border-radius: 14px; overflow: hidden; border: 2px solid #e8604c; background: #000; position: relative; }
   #qr-reader { width: 100%; }
-  #qr-reader video { width: 100% !important; max-height: 280px; object-fit: cover; }
-  #qr-reader img { display: none !important; }
-  #qr-reader__scan_region { position: relative; }
+  #qr-reader video { width: 100% !important; max-height: 260px; object-fit: cover; }
   #qr-reader__dashboard { display: none !important; }
   .scan-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 10; }
-  .scan-guide { width: 280px; height: 100px; border: 2.5px solid #e8604c; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); overflow: hidden; }
+  .scan-guide { width: 280px; height: 90px; border: 2.5px solid #e8604c; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); overflow: hidden; }
   .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: #e8604c; box-shadow: 0 0 8px #e8604c; animation: scanline 1.4s ease-in-out infinite; }
   @keyframes scanline { 0%,100% { top: 0; } 50% { top: calc(100% - 2px); } }
-  .cam-tip { background: #0a0a0a; text-align: center; font-size: 12px; color: #888; padding: 8px; }
+  .cam-tip { background: #0a0a0a; text-align: center; font-size: 12px; color: #888; padding: 7px; }
   .cam-tip span { color: #e8604c; font-weight: 600; }
-  .btn-stop { width: 100%; background: #1a1d27; border: none; border-top: 1px solid #2a2d3a; color: #aaa; font-size: 13px; padding: 11px; cursor: pointer; font-family: inherit; }
+  .btn-stop { width: 100%; background: #1a1d27; border: none; border-top: 1px solid #2a2d3a; color: #aaa; font-size: 13px; padding: 10px; cursor: pointer; font-family: inherit; }
   #result-card { display: none; margin-top: 20px; width: 100%; max-width: 420px; background: #fff; border-radius: 16px; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 20px; text-align: center; }
   #result-card img { width: 130px; height: 130px; object-fit: contain; border-radius: 10px; border: 1px solid #eee; margin-bottom: 12px; }
   #result-card h2 { font-size: 17px; color: #2c3e50; margin-bottom: 4px; line-height: 1.4; }
@@ -53,8 +53,15 @@
 <div class="card">
   <div class="input-group">
     <input type="text" id="query" placeholder="Barkod veya ürün adı..." />
-    <button class="btn-scan" id="btnScan" onclick="toggleCamera()">&#128247;</button>
+    <button class="btn-scan" id="btnScan" onclick="toggleCamera()" title="Canlı tarama">&#128247;</button>
   </div>
+
+  <!-- Fotoğrafla tara butonu -->
+  <button class="btn-photo" onclick="document.getElementById('file-input').click()">
+    📸 Fotoğrafla Tara (zor barkodlar için)
+  </button>
+  <input type="file" id="file-input" accept="image/*" capture="environment" onchange="scanFromPhoto(this)">
+
   <div id="camera-wrapper">
     <div style="position:relative;">
       <div id="qr-reader"></div>
@@ -65,6 +72,7 @@
     <div class="cam-tip">Barkodu çerçeveye tutun — <span>otomatik okuma aktif</span></div>
     <button class="btn-stop" onclick="stopCamera()">✕ Kamerayı Kapat</button>
   </div>
+
   <p class="error-msg" id="errorMsg">Ürün bulunamadı veya bağlantı hatası.</p>
   <button class="btn-submit" id="btnSubmit">Sorgula</button>
 </div>
@@ -88,17 +96,16 @@
 <script>
   const WEBHOOK_URL = "https://tuzwzs6k.rpcld.app/webhook/stok-sorgula";
   const API_KEY = "hobitu2024";
-
   let html5QrCode = null;
   let scanning = false;
 
-  const btnScan   = document.getElementById("btnScan");
-  const btnSubmit = document.getElementById("btnSubmit");
+  const btnScan    = document.getElementById("btnScan");
+  const btnSubmit  = document.getElementById("btnSubmit");
   const cameraWrapper = document.getElementById("camera-wrapper");
   const queryInput = document.getElementById("query");
-  const loading   = document.getElementById("loading");
+  const loading    = document.getElementById("loading");
   const resultCard = document.getElementById("result-card");
-  const errorMsg  = document.getElementById("errorMsg");
+  const errorMsg   = document.getElementById("errorMsg");
 
   function showToast(msg, dur) {
     const t = document.getElementById('toast');
@@ -107,6 +114,29 @@
     setTimeout(() => t.classList.remove('show'), dur || 2500);
   }
 
+  // --- FOTOĞRAFLA TARA (tam çözünürlük) ---
+  async function scanFromPhoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    input.value = "";
+    showToast("Fotoğraf taranıyor...", 3000);
+    const scanner = new Html5Qrcode("qr-reader-hidden");
+    try {
+      const result = await scanner.scanFile(file, false);
+      await scanner.clear();
+      if (result) {
+        if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
+        queryInput.value = result;
+        showToast('✓ Barkod okundu: ' + result);
+        submitQuery(result);
+      }
+    } catch(e) {
+      try { await scanner.clear(); } catch(err) {}
+      showToast('Barkod okunamadı, tekrar deneyin.');
+    }
+  }
+
+  // --- CANLI KAMERA ---
   function toggleCamera() {
     if (scanning) { stopCamera(); } else { startCamera(); }
   }
@@ -116,12 +146,10 @@
     cameraWrapper.style.display = "block";
     btnScan.textContent = '✕';
     scanning = true;
-
     html5QrCode = new Html5Qrcode("qr-reader");
-
     const config = {
       fps: 15,
-      qrbox: { width: 280, height: 100 },
+      qrbox: { width: 280, height: 90 },
       aspectRatio: 1.5,
       formatsToSupport: [
         Html5QrcodeSupportedFormats.EAN_13,
@@ -136,25 +164,20 @@
         Html5QrcodeSupportedFormats.QR_CODE
       ]
     };
-
     try {
-      await html5QrCode.start(
-        { facingMode: "environment" },
-        config,
-        (decodedText) => {
-          if (!decodedText || decodedText.length < 4) return;
-          if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
-          queryInput.value = decodedText;
-          stopCamera();
-          showToast('✓ Barkod okundu: ' + decodedText);
-          submitQuery(decodedText);
-        }
-      );
+      await html5QrCode.start({ facingMode: "environment" }, config, (code) => {
+        if (!code || code.length < 4) return;
+        if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
+        queryInput.value = code;
+        stopCamera();
+        showToast('✓ Barkod okundu: ' + code);
+        submitQuery(code);
+      });
     } catch(err) {
       cameraWrapper.style.display = "none";
       btnScan.textContent = '📷';
       scanning = false;
-      showToast('Kamera açılamadı: ' + err);
+      showToast('Kamera açılamadı');
     }
   }
 
@@ -200,32 +223,25 @@
   function renderResult(data) {
     const d = data?.data?.[0] || data?.body?.data?.[0] || data?.[0];
     if (!d) { errorMsg.style.display = "block"; return; }
-
     const imgUrl = d.MainProductImageUrl || d.ImageUrl || "";
     document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + imgUrl;
     document.getElementById("res-name").textContent = d.ProductName || "Ürün Bulunamadı";
     document.getElementById("res-cat").textContent = d.DefaultCategoryPath || "";
-
-    if (d.Property1) {
-      document.getElementById("res-renk").textContent = d.Property1;
-      document.getElementById("row-renk").style.display = "flex";
-    } else { document.getElementById("row-renk").style.display = "none"; }
-
-    if (d.Property2) {
-      document.getElementById("res-beden").textContent = d.Property2;
-      document.getElementById("row-beden").style.display = "flex";
-    } else { document.getElementById("row-beden").style.display = "none"; }
-
+    if (d.Property1) { document.getElementById("res-renk").textContent = d.Property1; document.getElementById("row-renk").style.display = "flex"; }
+    else { document.getElementById("row-renk").style.display = "none"; }
+    if (d.Property2) { document.getElementById("res-beden").textContent = d.Property2; document.getElementById("row-beden").style.display = "flex"; }
+    else { document.getElementById("row-beden").style.display = "none"; }
     const stock = parseInt(d.Stock) || 0;
     const stockEl = document.getElementById("res-stock");
     stockEl.textContent = stock + " Adet";
     stockEl.className = "value " + (stock > 0 ? "stock-ok" : "stock-out");
-
     const price = parseFloat(d.VatIncludedPriceTL || d.SellingPriceVatIncluded) || 0;
     document.getElementById("res-price").textContent = price.toFixed(2) + " TL";
     document.getElementById("res-barcode").textContent = d.Barcode || "-";
     resultCard.style.display = "block";
   }
 </script>
+<!-- Fotoğraf tarama için gizli div -->
+<div id="qr-reader-hidden" style="display:none"></div>
 </body>
 </html>

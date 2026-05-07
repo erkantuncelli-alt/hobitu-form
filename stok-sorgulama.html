@@ -123,7 +123,7 @@
       if ('BarcodeDetector' in window) {
         // Native BarcodeDetector — en hızlı ve doğru (Chrome/Android)
         const detector = new BarcodeDetector({
-          formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'upc_a', 'upc_e', 'itf', 'qr_code']
+          formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'upc_a', 'upc_e', 'itf', 'qr_code', 'data_matrix', 'codabar']
         });
         scanInterval = setInterval(async () => {
           if (!scanning || video.readyState < 2) return;

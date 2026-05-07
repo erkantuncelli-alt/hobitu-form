@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Mağaza Stok Sorgulama</title>
-<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
@@ -16,29 +15,15 @@
   input[type="text"]:focus { border-color: #e8604c; }
   .btn-scan { background: #2c3e50; color: #fff; border: none; border-radius: 10px; padding: 0 16px; font-size: 22px; cursor: pointer; flex-shrink: 0; }
   .btn-submit { width: 100%; background: #e8604c; color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 4px; }
-
-  /* CAMERA - Quagga style */
-  #camera-wrapper {
-    display: none;
-    margin-top: 16px;
-    border-radius: 14px;
-    overflow: hidden;
-    border: 2px solid #e8604c;
-    background: #000;
-    position: relative;
-  }
-  #scanner-container { position: relative; width: 100%; }
-  #scanner-container video { width: 100% !important; max-height: 260px; object-fit: cover; display: block; }
-  #scanner-container canvas { display: none !important; }
+  #camera-wrapper { display: none; margin-top: 16px; border-radius: 14px; overflow: hidden; border: 2px solid #e8604c; background: #000; position: relative; }
+  #camera-video { width: 100%; max-height: 280px; object-fit: cover; display: block; }
   .scan-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-  .scan-guide { width: 260px; height: 80px; border: 2.5px solid #e8604c; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.55); overflow: hidden; }
+  .scan-guide { width: 280px; height: 100px; border: 2.5px solid #e8604c; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); overflow: hidden; }
   .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: #e8604c; box-shadow: 0 0 8px #e8604c; animation: scanline 1.4s ease-in-out infinite; }
   @keyframes scanline { 0%,100% { top: 0; } 50% { top: calc(100% - 2px); } }
   .cam-tip { background: #0a0a0a; text-align: center; font-size: 12px; color: #888; padding: 8px; }
   .cam-tip span { color: #e8604c; font-weight: 600; }
   .btn-stop { width: 100%; background: #1a1d27; border: none; border-top: 1px solid #2a2d3a; color: #aaa; font-size: 13px; padding: 11px; cursor: pointer; font-family: inherit; }
-
-  /* RESULT */
   #result-card { display: none; margin-top: 20px; width: 100%; max-width: 420px; background: #fff; border-radius: 16px; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 20px; text-align: center; }
   #result-card img { width: 130px; height: 130px; object-fit: contain; border-radius: 10px; border: 1px solid #eee; margin-bottom: 12px; }
   #result-card h2 { font-size: 17px; color: #2c3e50; margin-bottom: 4px; line-height: 1.4; }
@@ -51,7 +36,6 @@
   .loading { display: none; text-align: center; color: #888; font-size: 14px; padding: 20px 0; }
   .error-msg { display: none; color: #e74c3c; font-size: 13px; margin-top: 8px; text-align: center; }
   .footer { margin-top: 24px; font-size: 12px; color: #bbb; }
-
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #222; border: 1px solid #333; border-radius: 10px; padding: 10px 20px; font-size: 13px; color: #fff; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
 </style>
@@ -66,19 +50,14 @@
     <input type="text" id="query" placeholder="Barkod veya ürün adı..." />
     <button class="btn-scan" id="btnScan" onclick="toggleCamera()">&#128247;</button>
   </div>
-
   <div id="camera-wrapper">
-    <div id="scanner-container">
-      <div class="scan-overlay">
-        <div class="scan-guide">
-          <div class="scan-line"></div>
-        </div>
-      </div>
+    <video id="camera-video" autoplay muted playsinline></video>
+    <div class="scan-overlay">
+      <div class="scan-guide"><div class="scan-line"></div></div>
     </div>
     <div class="cam-tip">Barkodu çerçeveye tutun — <span>otomatik okuma aktif</span></div>
-    <button class="btn-stop" id="btnStop" onclick="stopCamera()">✕ Kamerayı Kapat</button>
+    <button class="btn-stop" onclick="stopCamera()">✕ Kamerayı Kapat</button>
   </div>
-
   <p class="error-msg" id="errorMsg">Ürün bulunamadı veya bağlantı hatası.</p>
   <button class="btn-submit" id="btnSubmit">Sorgula</button>
 </div>
@@ -104,16 +83,19 @@
   const API_KEY = "hobitu2024";
 
   let scanning = false;
-  let resultCount = {};
+  let videoStream = null;
+  let scanInterval = null;
+  let lastCode = "";
+  let lastCodeCount = 0;
 
   const btnScan    = document.getElementById("btnScan");
-  const btnStop    = document.getElementById("btnStop");
   const btnSubmit  = document.getElementById("btnSubmit");
   const cameraWrapper = document.getElementById("camera-wrapper");
   const queryInput = document.getElementById("query");
   const loading    = document.getElementById("loading");
   const resultCard = document.getElementById("result-card");
   const errorMsg   = document.getElementById("errorMsg");
+  const video      = document.getElementById("camera-video");
 
   function showToast(msg, dur) {
     const t = document.getElementById('toast');
@@ -126,71 +108,82 @@
     if (scanning) { stopCamera(); } else { startCamera(); }
   }
 
-  function startCamera() {
-    cameraWrapper.style.display = "block";
+  async function startCamera() {
     errorMsg.style.display = "none";
-    resultCount = {};
-
-    Quagga.init({
-      inputStream: {
-        name: 'Live',
-        type: 'LiveStream',
-        target: document.getElementById('scanner-container'),
-        constraints: {
-          facingMode: 'environment',
-          width: { min: 640, ideal: 1280 },
-          height: { min: 480, ideal: 720 }
-        }
-      },
-      locator: { patchSize: 'medium', halfSample: true },
-      numOfWorkers: 2,
-      frequency: 10,
-      decoder: {
-        readers: [
-          'code_128_reader',
-          'ean_reader',
-          'ean_8_reader',
-          'code_39_reader',
-          'upc_reader',
-          'upc_e_reader',
-          'i2of5_reader'
-        ]
-      },
-      locate: true
-    }, function(err) {
-      if (err) {
-        cameraWrapper.style.display = "none";
-        showToast('Kamera açılamadı. Lütfen izin verin.');
-        return;
-      }
-      Quagga.start();
+    try {
+      videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
+      });
+      video.srcObject = videoStream;
+      cameraWrapper.style.display = "block";
       scanning = true;
       btnScan.textContent = '✕';
-    });
+      lastCode = ""; lastCodeCount = 0;
 
-    Quagga.onDetected(function(result) {
-      const code = result.codeResult.code;
-      if (!code || code.length < 4) return;
-
-      // Aynı kodu 3 kez gördükten sonra onayla (yanlış okuma önleme)
-      resultCount[code] = (resultCount[code] || 0) + 1;
-      if (resultCount[code] >= 3) {
-        if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
-        queryInput.value = code;
-        stopCamera();
-        showToast('✓ Barkod okundu: ' + code);
-        submitQuery(code);
+      if ('BarcodeDetector' in window) {
+        // Native BarcodeDetector — en hızlı ve doğru (Chrome/Android)
+        const detector = new BarcodeDetector({
+          formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'upc_a', 'upc_e', 'itf', 'qr_code']
+        });
+        scanInterval = setInterval(async () => {
+          if (!scanning || video.readyState < 2) return;
+          try {
+            const barcodes = await detector.detect(video);
+            if (barcodes.length > 0) {
+              const code = barcodes[0].rawValue;
+              if (!code || code.length < 4) return;
+              if (code === lastCode) {
+                lastCodeCount++;
+                if (lastCodeCount >= 2) onBarcodeDetected(code);
+              } else {
+                lastCode = code; lastCodeCount = 1;
+              }
+            }
+          } catch(e) {}
+        }, 200);
+      } else {
+        // Fallback: ZXing kütüphanesi
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/@zxing/library@latest/umd/index.min.js';
+        script.onload = () => {
+          const reader = new ZXing.BrowserMultiFormatReader();
+          reader.decodeFromStream(videoStream, video, (result) => {
+            if (result && scanning) {
+              const code = result.getText();
+              if (code === lastCode) {
+                lastCodeCount++;
+                if (lastCodeCount >= 3) onBarcodeDetected(code);
+              } else {
+                lastCode = code; lastCodeCount = 1;
+              }
+            }
+          });
+          video._zxing = reader;
+        };
+        document.head.appendChild(script);
       }
-    });
+    } catch(err) {
+      showToast('Kamera açılamadı: ' + err.message);
+    }
+  }
+
+  function onBarcodeDetected(code) {
+    if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
+    queryInput.value = code;
+    stopCamera();
+    showToast('✓ Barkod okundu: ' + code);
+    submitQuery(code);
   }
 
   function stopCamera() {
-    if (scanning) {
-      Quagga.stop();
-      scanning = false;
-    }
+    scanning = false;
+    if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
+    if (video._zxing) { try { video._zxing.reset(); } catch(e){} video._zxing = null; }
+    if (videoStream) { videoStream.getTracks().forEach(t => t.stop()); videoStream = null; }
+    video.srcObject = null;
     cameraWrapper.style.display = "none";
     btnScan.textContent = '📷';
+    lastCode = ""; lastCodeCount = 0;
   }
 
   btnSubmit.addEventListener("click", () => {
@@ -200,10 +193,7 @@
   });
 
   queryInput.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      const q = queryInput.value.trim();
-      if (q) submitQuery(q);
-    }
+    if (e.key === "Enter") { const q = queryInput.value.trim(); if (q) submitQuery(q); }
   });
 
   async function submitQuery(query) {
@@ -230,22 +220,19 @@
     if (!d) { errorMsg.style.display = "block"; return; }
 
     const imgUrl = d.MainProductImageUrl || d.ImageUrl || "";
-    document.getElementById("res-img").src = "https://www.hobitu.com/images/" + imgUrl;
+    document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + imgUrl;
     document.getElementById("res-name").textContent = d.ProductName || "Ürün Bulunamadı";
     document.getElementById("res-cat").textContent = d.DefaultCategoryPath || "";
 
     if (d.Property1) {
       document.getElementById("res-renk").textContent = d.Property1;
       document.getElementById("row-renk").style.display = "flex";
-    } else {
-      document.getElementById("row-renk").style.display = "none";
-    }
+    } else { document.getElementById("row-renk").style.display = "none"; }
+
     if (d.Property2) {
       document.getElementById("res-beden").textContent = d.Property2;
       document.getElementById("row-beden").style.display = "flex";
-    } else {
-      document.getElementById("row-beden").style.display = "none";
-    }
+    } else { document.getElementById("row-beden").style.display = "none"; }
 
     const stock = parseInt(d.Stock) || 0;
     const stockEl = document.getElementById("res-stock");

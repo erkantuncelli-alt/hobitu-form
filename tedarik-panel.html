@@ -428,7 +428,18 @@ function getFiltered() {
   let rows = allData;
   if (currentFilter === 'bekliyor')    rows = rows.filter(r => !isDone(r));
   if (currentFilter === 'tamamlandi')  rows = rows.filter(r => r['Durum'] === 'Tedarik Edildi ✓');
-  if (currentFilter === 'degisim')     rows = rows.filter(r => isDegisim(r));
+  if (currentFilter === 'degisim') {
+    rows = rows.filter(r => isDegisim(r));
+    rows = [...rows].sort((a, b) => {
+      const parse = d => {
+        if (!d) return 0;
+        const [datePart, timePart = '00:00'] = d.split(' ');
+        const [day, month, year] = datePart.split('.');
+        return new Date(year + '-' + month + '-' + day + 'T' + timePart).getTime();
+      };
+      return parse(b['Tarih']) - parse(a['Tarih']);
+    });
+  }
   if (q) rows = rows.filter(r =>
     (r['Sipariş No'] || '').toLowerCase().includes(q) ||
     (r['Ürün Adı'] || '').toLowerCase().includes(q) ||

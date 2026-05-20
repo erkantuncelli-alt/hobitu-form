@@ -6,7 +6,7 @@
 <title>Hobitu Eksik Stok</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e8e9ed; min-height: 100vh; padding-bottom: 40px; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e8e9ed; min-height: 100vh; padding-bottom: 80px; }
 .header { background: #1a1d27; padding: 16px 20px; border-bottom: 1px solid #2a2d3a; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
 .logo { width: 34px; height: 34px; background: #ff6b35; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .logo svg { width: 20px; height: 20px; fill: white; }
@@ -58,8 +58,71 @@ textarea { resize: none; min-height: 76px; font-family: inherit; font-size: 15px
 .detail-card .val:last-child { margin-bottom: 0; }
 .new-btn { background: transparent; border: 1.5px solid #ff6b35; border-radius: 12px; padding: 14px 36px; color: #ff6b35; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px; font-family: inherit; }
 .new-btn:active { background: #1a0d00; }
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #222; border: 1px solid #333; border-radius: 10px; padding: 10px 20px; font-size: 13px; color: #fff; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #222; border: 1px solid #333; border-radius: 10px; padding: 10px 20px; font-size: 13px; color: #fff; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 68px;
+  background: #13151f;
+  border-top: 1px solid #2a2d3a;
+  display: flex;
+  z-index: 200;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+}
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
+  font-family: inherit;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px 4px;
+  position: relative;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-tab:active { background: #1a1d27; }
+.nav-tab.active { pointer-events: none; }
+.nav-tab.active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 2.5px;
+  background: #ff6b35;
+  border-radius: 0 0 3px 3px;
+}
+.nav-tab svg {
+  width: 22px; height: 22px;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.nav-tab:active svg { transform: scale(0.9); }
+.nav-tab .nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+.nav-tab.active .nav-label { color: #ff6b35; }
+.nav-tab.active svg { stroke: #ff6b35; }
+.nav-tab:not(.active) .nav-label { color: #555; }
+.nav-tab:not(.active) svg { stroke: #555; }
+
+/* separator between tabs */
+.nav-sep {
+  width: 1px;
+  background: #2a2d3a;
+  margin: 14px 0;
+  flex-shrink: 0;
+}
 </style>
 </head>
 <body>
@@ -141,6 +204,32 @@ textarea { resize: none; min-height: 76px; font-family: inherit; font-size: 15px
 
 <div class="toast" id="toast"></div>
 
+<!-- ── BOTTOM NAVIGATION ── -->
+<nav class="bottom-nav">
+  <!-- Eksik Stok — aktif sayfa -->
+  <button class="nav-tab active">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 7H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2z"/>
+      <path d="M16 3H8v4h8V3z"/>
+      <line x1="9" y1="13" x2="15" y2="13"/>
+      <line x1="9" y1="16" x2="13" y2="16"/>
+    </svg>
+    <span class="nav-label">Eksik Stok</span>
+  </button>
+
+  <div class="nav-sep"></div>
+
+  <!-- Değişim & Tedarik — diğer panel -->
+  <a class="nav-tab" href="https://erkantuncelli-alt.github.io/hobitu-form/tedarik-panel.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+      <line x1="12" y1="22.08" x2="12" y2="12"/>
+    </svg>
+    <span class="nav-label">Değişim &amp; Tedarik</span>
+  </a>
+</nav>
+
 <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 <script>
 const WEBHOOK = 'https://tuzwzs6k.rpcld.app/webhook/eksik-stok';
@@ -181,13 +270,8 @@ function startCamera() {
     frequency: 10,
     decoder: {
       readers: [
-        'code_128_reader',
-        'ean_reader',
-        'ean_8_reader',
-        'code_39_reader',
-        'upc_reader',
-        'upc_e_reader',
-        'i2of5_reader'
+        'code_128_reader','ean_reader','ean_8_reader',
+        'code_39_reader','upc_reader','upc_e_reader','i2of5_reader'
       ]
     },
     locate: true
@@ -202,12 +286,9 @@ function startCamera() {
     document.getElementById('scanBtn').textContent = 'Kapat';
   });
 
-  // Barkod algılandığında
   Quagga.onDetected(function(result) {
     const code = result.codeResult.code;
     if (!code || code.length < 4) return;
-
-    // Aynı kodu 3 kez gördükten sonra onayla (yanlış okuma önleme)
     resultCount[code] = (resultCount[code] || 0) + 1;
     if (resultCount[code] >= 3) {
       navigator.vibrate && navigator.vibrate([80, 30, 80]);
@@ -220,10 +301,7 @@ function startCamera() {
 }
 
 function stopCamera() {
-  if (scanning) {
-    Quagga.stop();
-    scanning = false;
-  }
+  if (scanning) { Quagga.stop(); scanning = false; }
   document.getElementById('cameraWrap').classList.remove('show');
   document.getElementById('scanBtn').innerHTML = `
     <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">

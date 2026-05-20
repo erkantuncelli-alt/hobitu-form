@@ -31,9 +31,12 @@
   --orange-border: #7a3500;
   --yellow: #eab308;
   --yellow-bg: #1f1a00;
+  --teal: #14b8a6;
+  --teal-bg: #0a1f1e;
+  --teal-border: #0f4f49;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
 
 .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
 .brand { display: flex; align-items: center; gap: 10px; }
@@ -46,17 +49,19 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .refresh-btn.loading svg { animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.stats-bar { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); }
-.stat { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; text-align: center; }
+.stats-bar { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
+.stat { flex: 1; min-width: 70px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; text-align: center; }
 .stat-num { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; }
 .stat-num.red { color: var(--red); }
 .stat-num.green { color: var(--green); }
+.stat-num.teal { color: var(--teal); }
 .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
 
 .filters { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
-.filter-tabs { display: flex; gap: 6px; }
-.filter-btn { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 4px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: center; transition: all 0.15s; }
+.filter-tabs { display: flex; gap: 6px; overflow-x: auto; }
+.filter-btn { flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: center; transition: all 0.15s; white-space: nowrap; }
 .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 600; }
+.filter-btn.active.teal-tab { background: var(--teal); border-color: var(--teal); }
 .search-wrap { position: relative; }
 .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text3); pointer-events: none; }
 .search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px 9px 34px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
@@ -66,19 +71,33 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .cards { padding: 0 16px 24px; display: flex; flex-direction: column; gap: 10px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .card.done { opacity: 0.5; }
+.card.degisim-card { border-color: var(--teal-border); }
 .card-top { padding: 14px 14px 10px; }
 .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 .card-siparis { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); }
 .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 .badge-bekliyor { background: var(--yellow-bg); color: var(--yellow); border: 1px solid #3a2e00; }
 .badge-tamamlandi { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-.badge-degisim { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+.badge-degisim { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .card-urun { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .card-not { font-size: 12px; color: var(--text3); margin-bottom: 10px; font-style: italic; }
 .card-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 .meta-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; }
 .meta-pill.eksik { color: var(--red); border-color: #3a1515; background: #1f0f0f; }
+
+/* Değişim ürünleri kutusu */
+.degisim-box { margin-top: 10px; background: var(--teal-bg); border: 1px solid var(--teal-border); border-radius: 10px; overflow: hidden; }
+.degisim-box-header { padding: 7px 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--teal-border); }
+.degisim-box-header span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--teal); }
+.degisim-arrow { font-size: 13px; color: var(--teal); margin-left: auto; }
+.degisim-box-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.degisim-urun-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.degisim-urun-name { font-size: 13px; color: var(--text); font-weight: 500; }
+.degisim-urun-adet { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--teal); background: rgba(20,184,166,0.1); border: 1px solid var(--teal-border); border-radius: 5px; padding: 2px 8px; }
+.degisim-original { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; padding: 0 12px 8px; }
+.degisim-original s { color: var(--red); opacity: 0.7; }
+
 .card-bottom { border-top: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .card-tarih { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; flex-shrink: 0; }
 .card-btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
@@ -108,8 +127,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 @media (max-width: 767px) { .table-section { display: none; } }
 
 .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.table-header { display: grid; grid-template-columns: 120px 1fr 60px 70px 100px 85px 1fr; padding: 12px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); font-family: 'DM Mono', monospace; }
-.table-row { display: grid; grid-template-columns: 120px 1fr 60px 70px 100px 85px 1fr; padding: 12px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.1s; gap: 8px; }
+.table-header { display: grid; grid-template-columns: 120px 1fr 60px 70px 130px 90px 1fr; padding: 12px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); font-family: 'DM Mono', monospace; gap: 8px; }
+.table-row { display: grid; grid-template-columns: 120px 1fr 60px 70px 130px 90px 1fr; padding: 12px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.1s; gap: 8px; }
 .table-row:last-child { border-bottom: none; }
 .table-row:hover { background: var(--surface2); }
 .table-row.done { opacity: 0.45; }
@@ -118,6 +137,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .col-urun small { display: block; font-size: 11px; color: var(--text3); margin-top: 2px; }
 .col-num { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text2); }
 .col-num.eksik { color: var(--red); font-weight: 500; }
+.col-degisim { font-size: 12px; color: var(--teal); }
+.col-degisim span { display: block; }
+.col-degisim .no-degisim { color: var(--text3); font-style: italic; }
 .col-tarih { font-size: 12px; color: var(--text3); font-family: 'DM Mono', monospace; }
 .col-action { display: flex; gap: 5px; justify-content: flex-end; flex-wrap: wrap; }
 
@@ -141,28 +163,37 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .modal-confirm-orange { flex: 2; background: var(--orange); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .modal-confirm-green:disabled, .modal-confirm-blue:disabled, .modal-confirm-orange:disabled { opacity: 0.5; }
 
-/* Değişim & Stok form */
 .degisim-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .degisim-item { display: flex; gap: 8px; align-items: center; }
 .degisim-item input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
-.degisim-item input:focus { border-color: var(--blue); }
+.degisim-item input:focus { border-color: var(--teal); }
 .degisim-item .urun-input { flex: 1; }
 .degisim-item .adet-input { width: 80px; }
 .degisim-item .remove-btn { background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text3); font-size: 16px; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.add-item-btn { background: transparent; border: 1px dashed var(--border2); border-radius: 8px; padding: 9px; color: var(--text3); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; text-align: center; }
-.add-item-btn:hover { border-color: var(--blue); color: var(--blue); }
+.add-item-btn { background: transparent; border: 1px dashed var(--teal-border); border-radius: 8px; padding: 9px; color: var(--teal); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; width: 100%; text-align: center; }
 
 .stok-input-wrap { margin-bottom: 16px; }
 .stok-input-wrap label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
 .stok-input { width: 100%; background: var(--surface2); border: 1.5px solid var(--orange-border); border-radius: 10px; padding: 14px; font-size: 20px; color: var(--text); font-family: 'DM Mono', monospace; outline: none; -webkit-appearance: none; text-align: center; }
 .stok-input:focus { border-color: var(--orange); }
-.stok-fark { text-align: center; font-size: 13px; color: var(--text3); margin-top: 8px; }
-.stok-fark span { font-weight: 700; }
-.stok-fark span.azaldi { color: var(--red); }
-.stok-fark span.arttu { color: var(--green); }
 
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--text); z-index: 999; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; }
+.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--text); z-index: 999; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 68px; background: #13151f; border-top: 1px solid var(--border); display: flex; z-index: 200; box-shadow: 0 -4px 24px rgba(0,0,0,0.5); }
+.nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-family: inherit; border: none; background: transparent; cursor: pointer; padding: 8px 4px; position: relative; transition: background 0.15s; -webkit-tap-highlight-color: transparent; }
+.nav-tab:active { background: var(--surface2); }
+.nav-tab.active { pointer-events: none; }
+.nav-tab.active::before { content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 2.5px; background: var(--accent); border-radius: 0 0 3px 3px; }
+.nav-tab svg { width: 22px; height: 22px; flex-shrink: 0; transition: transform 0.15s; }
+.nav-tab:active svg { transform: scale(0.9); }
+.nav-tab .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.03em; line-height: 1; }
+.nav-tab.active .nav-label { color: var(--accent); }
+.nav-tab.active svg { stroke: var(--accent); }
+.nav-tab:not(.active) .nav-label { color: #555; }
+.nav-tab:not(.active) svg { stroke: #555; }
+.nav-sep { width: 1px; background: var(--border); margin: 14px 0; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -189,6 +220,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <div class="stats-bar">
   <div class="stat"><div class="stat-num red" id="countBekliyor">-</div><div class="stat-label">Bekliyor</div></div>
   <div class="stat"><div class="stat-num green" id="countTamamlandi">-</div><div class="stat-label">Tamamlandı</div></div>
+  <div class="stat"><div class="stat-num teal" id="countDegisim">-</div><div class="stat-label">Değişim</div></div>
   <div class="stat"><div class="stat-num" id="countToplam">-</div><div class="stat-label">Toplam</div></div>
 </div>
 
@@ -197,6 +229,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <button class="filter-btn active" onclick="setFilter('hepsi', this)">Tümü</button>
     <button class="filter-btn" onclick="setFilter('bekliyor', this)">Bekliyor</button>
     <button class="filter-btn" onclick="setFilter('tamamlandi', this)">Tamamlandı</button>
+    <button class="filter-btn teal-tab" onclick="setFilter('degisim', this)">🔄 Değişenler</button>
   </div>
   <div class="search-wrap">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -209,7 +242,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <div class="table-section">
   <div class="table-wrap">
     <div class="table-header">
-      <div>SİPARİŞ NO</div><div>ÜRÜN / NOT</div><div>EKSİK</div><div>RAFTAKI</div><div>TARİH</div><div>DURUM</div><div></div>
+      <div>SİPARİŞ NO</div><div>ÜRÜN / NOT</div><div>EKSİK</div><div>RAFTAKI</div><div>DEĞİŞEN ÜRÜN(LER)</div><div>DURUM</div><div></div>
     </div>
     <div id="desktopTable"></div>
   </div>
@@ -269,12 +302,33 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 
 <div class="toast" id="toast"></div>
 
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="nav-tab" href="https://erkantuncelli-alt.github.io/hobitu-form/index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 7H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2z"/>
+      <path d="M16 3H8v4h8V3z"/>
+      <line x1="9" y1="13" x2="15" y2="13"/>
+      <line x1="9" y1="16" x2="13" y2="16"/>
+    </svg>
+    <span class="nav-label">Eksik Stok</span>
+  </a>
+  <div class="nav-sep"></div>
+  <button class="nav-tab active">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+      <line x1="12" y1="22.08" x2="12" y2="12"/>
+    </svg>
+    <span class="nav-label">Değişim &amp; Tedarik</span>
+  </button>
+</nav>
+
 <script>
 const LIST_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-listesi';
 const TAMAMLA_URL = 'https://tuzwzs6k.rpcld.app/webhook/tedarik-tamamla';
 const TG_TOKEN = ['8651784008', 'AAHv_nikFCrEvAWliM_09TXMfnzfXdZ2MI4'].join(':');
 const TG_MUHASEBE_CHAT = '-5144681148';
-const TG_EKSIK_CHAT = '-5038862910';
 
 let allData = [];
 let currentFilter = 'hepsi';
@@ -299,9 +353,11 @@ async function loadData() {
 }
 
 function updateStats() {
-  const done = r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı';
-  document.getElementById('countBekliyor').textContent = allData.filter(r => !done(r)).length;
-  document.getElementById('countTamamlandi').textContent = allData.filter(r => done(r)).length;
+  const isDone = r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı';
+  const isDegisim = r => r['Durum'] === 'Değişim Yapıldı';
+  document.getElementById('countBekliyor').textContent = allData.filter(r => !isDone(r)).length;
+  document.getElementById('countTamamlandi').textContent = allData.filter(r => r['Durum'] === 'Tedarik Edildi ✓').length;
+  document.getElementById('countDegisim').textContent = allData.filter(r => isDegisim(r)).length;
   document.getElementById('countToplam').textContent = allData.length;
 }
 
@@ -313,50 +369,87 @@ function setFilter(f, el) {
 }
 
 function isDone(row) { return row['Durum'] === 'Tedarik Edildi ✓' || row['Durum'] === 'Değişim Yapıldı'; }
+function isDegisim(row) { return row['Durum'] === 'Değişim Yapıldı'; }
+
+/* Değişim Ürünleri alanını parse et
+   Sheet'ten gelen format: '[{"urun":"X","adet":"2"}]' (JSON string)
+   veya "X x2, Y x1" (düz metin) */
+function parseDegisimUrunler(raw) {
+  if (!raw) return [];
+  try { return JSON.parse(raw); } catch(e) { return []; }
+}
 
 function getBadge(row) {
   if (row['Durum'] === 'Tedarik Edildi ✓') return `<span class="badge badge-tamamlandi"><span class="badge-dot"></span>Tamamlandı</span>`;
-  if (row['Durum'] === 'Değişim Yapıldı') return `<span class="badge badge-degisim"><span class="badge-dot"></span>Değişim</span>`;
+  if (row['Durum'] === 'Değişim Yapıldı')  return `<span class="badge badge-degisim"><span class="badge-dot"></span>Değişim</span>`;
   return `<span class="badge badge-bekliyor"><span class="badge-dot"></span>Bekliyor</span>`;
 }
 
+function renderDegisimBox(row) {
+  const urunler = parseDegisimUrunler(row['Değişim Ürünleri']);
+  if (!urunler.length) return '';
+  return `
+    <div class="degisim-box">
+      <div class="degisim-box-header">
+        <span>🔄 Değiştirilen Ürünler</span>
+      </div>
+      <div class="degisim-original"><s>${row['Ürün Adı'] || '-'}</s>&nbsp;→</div>
+      <div class="degisim-box-body">
+        ${urunler.map(u => `
+          <div class="degisim-urun-row">
+            <span class="degisim-urun-name">${u.urun}</span>
+            <span class="degisim-urun-adet">${u.adet} adet</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderDegisimCell(row) {
+  const urunler = parseDegisimUrunler(row['Değişim Ürünleri']);
+  if (!urunler.length) return `<span class="no-degisim">—</span>`;
+  return urunler.map(u => `<span>• ${u.urun} <strong>(${u.adet})</strong></span>`).join('');
+}
+
 function getActionBtns(satirNo, row) {
-  const rj = JSON.stringify(row).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+  const rj = JSON.stringify(row).replace(/'/g,"&#39;");
   if (isDone(row)) {
     return `
-      <button class="btn btn-ghost" disabled>✓ ${row['Durum']}</button>
-      <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>📦 Stok</button>`;
+      <button class="btn btn-ghost" disabled>${row['Durum'] === 'Değişim Yapıldı' ? '🔄 Değişim' : '✓ Tamamlandı'}</button>
+      <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>`;
   }
   return `
-    <button class="btn btn-green" onclick='openTedarikModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>Tedarik Edildi</button>
-    <button class="btn btn-blue" onclick='openDegisimModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>Değişim</button>
-    <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${JSON.stringify(row).replace(/'/g,"&#39;")})'>📦 Stok</button>`;
+    <button class="btn btn-green" onclick='openTedarikModal(${satirNo}, ${rj})'>Tedarik Edildi</button>
+    <button class="btn btn-blue"  onclick='openDegisimModal(${satirNo}, ${rj})'>Değişim</button>
+    <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>`;
 }
 
 function getFiltered() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let rows = allData;
-  if (currentFilter === 'bekliyor') rows = rows.filter(r => !isDone(r));
-  if (currentFilter === 'tamamlandi') rows = rows.filter(r => isDone(r));
+  if (currentFilter === 'bekliyor')    rows = rows.filter(r => !isDone(r));
+  if (currentFilter === 'tamamlandi')  rows = rows.filter(r => r['Durum'] === 'Tedarik Edildi ✓');
+  if (currentFilter === 'degisim')     rows = rows.filter(r => isDegisim(r));
   if (q) rows = rows.filter(r =>
     (r['Sipariş No'] || '').toLowerCase().includes(q) ||
     (r['Ürün Adı'] || '').toLowerCase().includes(q) ||
-    (r['Not'] || '').toLowerCase().includes(q)
+    (r['Not'] || '').toLowerCase().includes(q) ||
+    (r['Değişim Ürünleri'] || '').toLowerCase().includes(q)
   );
   return rows;
 }
 
 function renderAll() {
   const rows = getFiltered();
-  if (rows.length === 0) {
-    const empty = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Kayıt bulunamadı</p></div>`;
+  const empty = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Kayıt bulunamadı</p></div>`;
+  if (!rows.length) {
     document.getElementById('mobileCards').innerHTML = empty;
     document.getElementById('desktopTable').innerHTML = empty;
     return;
   }
+
   document.getElementById('mobileCards').innerHTML = rows.map(row => {
     const satirNo = row.satirNo;
-    return `<div class="card ${isDone(row) ? 'done' : ''}">
+    return `<div class="card ${isDone(row) ? 'done' : ''} ${isDegisim(row) ? 'degisim-card' : ''}">
       <div class="card-top">
         <div class="card-head"><div class="card-siparis">${row['Sipariş No'] || '-'}</div>${getBadge(row)}</div>
         <div class="card-urun">${row['Ürün Adı'] || '-'}</div>
@@ -365,6 +458,7 @@ function renderAll() {
           <div class="meta-pill eksik">Eksik: ${row['Eksik Miktar'] || '-'}</div>
           <div class="meta-pill">Rafta: ${row['Mevcut Miktar'] || '-'}</div>
         </div>
+        ${isDegisim(row) ? renderDegisimBox(row) : ''}
       </div>
       <div class="card-bottom">
         <div class="card-tarih">${row['Tarih'] || '-'}</div>
@@ -380,7 +474,7 @@ function renderAll() {
       <div class="col-urun">${row['Ürün Adı'] || '-'}${row['Not'] ? `<small>${row['Not']}</small>` : ''}</div>
       <div class="col-num eksik">${row['Eksik Miktar'] || '-'}</div>
       <div class="col-num">${row['Mevcut Miktar'] || '-'}</div>
-      <div class="col-tarih">${row['Tarih'] || '-'}</div>
+      <div class="col-degisim">${renderDegisimCell(row)}</div>
       <div>${getBadge(row)}</div>
       <div class="col-action">${getActionBtns(satirNo, row)}</div>
     </div>`;
@@ -426,7 +520,7 @@ function openDegisimModal(satirNo, row) {
   document.getElementById('degisimItems').innerHTML = `
     <div class="degisim-item">
       <input type="text" class="urun-input" placeholder="Yeni ürün adı..." />
-      <input type="number" class="adet-input" placeholder="Adet" min="1" />
+      <input type="number" class="adet-input" placeholder="Adet" min="1" inputmode="numeric" />
       <button class="remove-btn" onclick="removeDegisimItem(this)">×</button>
     </div>`;
   document.getElementById('degisimModal').classList.add('show');
@@ -435,7 +529,7 @@ function openDegisimModal(satirNo, row) {
 function addDegisimItem() {
   const div = document.createElement('div');
   div.className = 'degisim-item';
-  div.innerHTML = `<input type="text" class="urun-input" placeholder="Yeni ürün adı..." /><input type="number" class="adet-input" placeholder="Adet" min="1" /><button class="remove-btn" onclick="removeDegisimItem(this)">×</button>`;
+  div.innerHTML = `<input type="text" class="urun-input" placeholder="Yeni ürün adı..." /><input type="number" class="adet-input" placeholder="Adet" min="1" inputmode="numeric" /><button class="remove-btn" onclick="removeDegisimItem(this)">×</button>`;
   document.getElementById('degisimItems').appendChild(div);
 }
 
@@ -454,24 +548,34 @@ async function confirmDegisim() {
     if (!urun || !adet) { valid = false; return; }
     yeniUrunler.push({ urun, adet });
   });
-  if (!valid || yeniUrunler.length === 0) { showToast('Ürün adı ve adet zorunlu!'); return; }
+  if (!valid || !yeniUrunler.length) { showToast('Ürün adı ve adet zorunlu!'); return; }
   const btn = document.getElementById('degisimConfirm');
   btn.disabled = true; btn.textContent = 'Kaydediliyor...';
   try {
     fetch(TAMAMLA_URL, {
       method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tip: 'degisim', siparisNo: selectedRow.row['Sipariş No'], satirNo: selectedRow.satirNo, orijinalUrun: selectedRow.row['Ürün Adı'], yeniUrunler })
+      body: JSON.stringify({
+        tip: 'degisim',
+        siparisNo: selectedRow.row['Sipariş No'],
+        satirNo: selectedRow.satirNo,
+        orijinalUrun: selectedRow.row['Ürün Adı'],
+        yeniUrunler
+      })
     });
     await new Promise(r => setTimeout(r, 600));
     const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
-    if (idx !== -1) allData[idx]['Durum'] = 'Değişim Yapıldı';
+    if (idx !== -1) {
+      allData[idx]['Durum'] = 'Değişim Yapıldı';
+      // Lokal önizleme için de değişim ürünlerini kaydet
+      allData[idx]['Değişim Ürünleri'] = JSON.stringify(yeniUrunler);
+    }
     updateStats(); renderAll(); closeAllModals();
     showToast('🔄 Değişim kaydedildi!');
   } finally { btn.disabled = false; btn.textContent = 'Değişimi Kaydet'; }
 }
 
-/* ====== STOK DÜZENLEME ====== */
+/* ====== STOK ====== */
 function openStokModal(satirNo, row) {
   selectedRow = { satirNo, row };
   document.getElementById('stokDetail').innerHTML = `
@@ -496,25 +600,21 @@ async function confirmStok() {
       `🔢 *Sayılan Miktar:* ${sayilanMiktar} adet\n` +
       (aciklama ? `📝 *Açıklama:* ${aciklama}\n` : '') +
       `\n📅 ${new Date().toLocaleDateString('tr-TR')} ${new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})}`;
-
     await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: TG_MUHASEBE_CHAT, text: mesaj, parse_mode: 'Markdown' })
     });
-
     closeAllModals();
     showToast('📤 Muhasebe grubuna gönderildi!');
-  } catch(e) {
-    showToast('Hata oluştu. Tekrar deneyin.');
-  } finally { btn.disabled = false; btn.textContent = '📤 Muhasebeye Gönder'; }
+  } catch(e) { showToast('Hata oluştu.'); }
+  finally { btn.disabled = false; btn.textContent = '📤 Muhasebeye Gönder'; }
 }
 
 function closeAllModals() {
   ['tedarikModal','degisimModal','stokModal'].forEach(id => document.getElementById(id).classList.remove('show'));
   selectedRow = null;
 }
-
 ['tedarikModal','degisimModal','stokModal'].forEach(id => {
   document.getElementById(id).addEventListener('click', e => { if (e.target === document.getElementById(id)) closeAllModals(); });
 });

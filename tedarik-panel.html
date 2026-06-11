@@ -323,8 +323,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 <div class="modal-overlay" id="iptalModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>🚫 Tüm Siparişi İptal Et</h3>
-    <p>Bu sipariş numarasına ait <strong>tüm satırlar</strong> "İptal Edildi" durumuna geçecek. T-Soft'a otomatik not eklenecek, süreç değişikliğini manuel yapacaksın.</p>
+    <h3>🚫 Ürünü İptal Et</h3>
+    <p>Bu ürün "İptal Edildi" durumuna geçecek. T-Soft siparişine otomatik not eklenecek, süreç değişikliğini manuel yapacaksın.</p>
     <div class="modal-detail" id="iptalDetail"></div>
     <div class="iptal-warn">
       <div class="iptal-warn-title">⚠️ Bu işlem geri alınamaz</div>
@@ -460,7 +460,7 @@ function getActionBtns(satirNo, row) {
     return `
       <button class="btn btn-ghost" disabled>${row['Durum'] === 'Değişim Yapıldı' ? '🔄 Değişim' : '✓ Tamamlandı'}</button>
       <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>
-      <button class="btn btn-red" onclick='openIptalModal("${row['Sipariş No']}",${rj})'>🚫 İptal</button>`;
+      <button class="btn btn-red" onclick='openIptalModal(${satirNo}, ${rj})'>🚫 İptal</button>`;
   }
 
   // Bekliyor → tüm butonlar
@@ -468,7 +468,7 @@ function getActionBtns(satirNo, row) {
     <button class="btn btn-green"  onclick='openTedarikModal(${satirNo}, ${rj})'>Tedarik Edildi</button>
     <button class="btn btn-blue"   onclick='openDegisimModal(${satirNo}, ${rj})'>Değişim</button>
     <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>
-    <button class="btn btn-red"    onclick='openIptalModal("${row['Sipariş No']}",${rj})'>🚫 İptal</button>`;
+    <button class="btn btn-red"    onclick='openIptalModal(${satirNo}, ${rj})'>🚫 İptal</button>`;
 }
 
 function getFiltered() {
@@ -672,77 +672,50 @@ async function confirmStok() {
   finally { btn.disabled = false; btn.textContent = '📤 Muhasebeye Gönder'; }
 }
 
-/* ====== SİPARİŞ İPTAL ====== */
-/*
-  n8n tarafında yapman gereken:
-  tedarik-tamamla webhook'unu alan IF node'una yeni bir dal ekle:
-    Koşul: {{ $json.tip }} === "iptal"
-  Bu dal:
-    1. Google Sheets → aynı siparisNo'ya sahip tüm satırları bul (satirNoListesi ile döngü)
-    2. Her satır için Durum sütununu "İptal Edildi" yap
-    3. T-Soft API → sipariş notuna "Tüm sipariş iptal edildi" ekle (mevcut T-Soft node'unu kopyala)
-  
-  Webhook'a gelen body:
-  {
-    tip: "iptal",
-    siparisNo: "HS-12345",
-    satirNoListesi: [3, 7, 12],   // etkilenen satır numaraları
-    iptalEdenUrun: "Ürün Adı",    // ilk tıklanan satırın ürünü (T-Soft notu için referans)
-    toplamSatir: 3
-  }
-*/
-function openIptalModal(siparisNo, row) {
-  // Aynı sipariş no'ya ait TÜM satırları bul
-  const ilgiliSatirlar = allData.filter(r => r['Sipariş No'] === siparisNo);
-  const bekleyenler    = ilgiliSatirlar.filter(r => !isIptal(r)); // zaten iptal olmayanlar
+/* ====== ÜRÜN İPTAL ====== */
+function openIptalModal(satirNo, row) {
+  selectedRow = { satirNo, row };
 
-  selectedRow = { siparisNo, satirlar: ilgiliSatirlar, bekleyenler };
-
-  // Kaç satır etkilenecek, hangi ürünler
   document.getElementById('iptalDetail').innerHTML = `
-    <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${siparisNo}</span></div>
-    <div class="mrow"><span class="mkey">Toplam Satır</span><span class="mval">${ilgiliSatirlar.length} satır</span></div>
-    <div class="mrow"><span class="mkey">İptal Edilecek</span><span class="mval red">${bekleyenler.length} satır</span></div>`;
+    <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${row['Sipariş No'] || '-'}</span></div>
+    <div class="mrow"><span class="mkey">Ürün</span><span class="mval">${row['Ürün Adı'] || '-'}</span></div>
+    <div class="mrow"><span class="mkey">Eksik Miktar</span><span class="mval red">${row['Eksik Miktar'] || '-'} adet</span></div>
+    <div class="mrow"><span class="mkey">Mevcut Durum</span><span class="mval">${row['Durum'] || 'Bekliyor'}</span></div>`;
 
-  document.getElementById('iptalWarnList').innerHTML = bekleyenler.map(r =>
-    `<li>${r['Ürün Adı'] || '-'} — <span style="color:var(--text3)">${r['Durum'] || 'Bekliyor'}</span></li>`
-  ).join('');
+  document.getElementById('iptalWarnList').innerHTML =
+    `<li>Bu satır "İptal Edildi" olarak işaretlenecek</li>
+     <li>T-Soft siparişine not eklenecek</li>
+     <li>Siparişin diğer ürünleri etkilenmeyecek</li>`;
 
   document.getElementById('iptalModal').classList.add('show');
 }
 
 async function confirmIptal() {
-  if (!selectedRow || !selectedRow.bekleyenler.length) return;
+  if (!selectedRow) return;
   const btn = document.getElementById('iptalConfirm');
   btn.disabled = true; btn.textContent = 'İptal ediliyor...';
   try {
-    const satirNoListesi = selectedRow.bekleyenler.map(r => r.satirNo);
-
-    // n8n'e tek istek: tüm satır no'larını gönder
     fetch(TAMAMLA_URL, {
       method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         tip: 'iptal',
-        siparisNo: selectedRow.siparisNo,
-        satirNoListesi,
-        iptalEdenUrun: selectedRow.bekleyenler[0]['Ürün Adı'] || '',
-        toplamSatir: satirNoListesi.length
+        siparisNo: selectedRow.row['Sipariş No'],
+        satirNo: selectedRow.satirNo,
+        SatirNo: selectedRow.satirNo,
+        urunAdi: selectedRow.row['Ürün Adı'] || ''
       })
     });
 
     await new Promise(r => setTimeout(r, 600));
 
-    // Lokal state güncelle
-    satirNoListesi.forEach(sn => {
-      const idx = allData.findIndex(r => r.satirNo === sn);
-      if (idx !== -1) allData[idx]['Durum'] = 'İptal Edildi';
-    });
+    const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
+    if (idx !== -1) allData[idx]['Durum'] = 'İptal Edildi';
 
     updateStats(); renderAll(); closeAllModals();
-    showToast(`🚫 ${satirNoListesi.length} satır iptal edildi`);
+    showToast('🚫 Ürün iptal edildi');
   } finally {
-    btn.disabled = false; btn.textContent = '🚫 Siparişi İptal Et';
+    btn.disabled = false; btn.textContent = '🚫 Ürünü İptal Et';
   }
 }
 

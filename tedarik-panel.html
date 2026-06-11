@@ -20,6 +20,8 @@
   --green-bg: #0f2318;
   --green-border: #166534;
   --red: #ef4444;
+  --red-bg: #1f0a0a;
+  --red-border: #7a1515;
   --blue: #3b82f6;
   --blue-bg: #0f1829;
   --blue-border: #1e3a5f;
@@ -50,11 +52,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .stats-bar { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
-.stat { flex: 1; min-width: 70px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; text-align: center; }
+.stat { flex: 1; min-width: 60px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; text-align: center; }
 .stat-num { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; }
 .stat-num.red { color: var(--red); }
 .stat-num.green { color: var(--green); }
 .stat-num.teal { color: var(--teal); }
+.stat-num.dimred { color: #c03030; }
 .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
 
 .filters { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
@@ -62,6 +65,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .filter-btn { flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: center; transition: all 0.15s; white-space: nowrap; }
 .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 600; }
 .filter-btn.active.teal-tab { background: var(--teal); border-color: var(--teal); }
+.filter-btn.active.red-tab { background: var(--red); border-color: var(--red); }
 .search-wrap { position: relative; }
 .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text3); pointer-events: none; }
 .search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px 9px 34px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
@@ -71,6 +75,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .cards { padding: 0 16px 24px; display: flex; flex-direction: column; gap: 10px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .card.done { opacity: 0.5; }
+.card.iptal-card { border-color: var(--red-border); opacity: 0.45; }
 .card.degisim-card { border-color: var(--teal-border); }
 .card-top { padding: 14px 14px 10px; }
 .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
@@ -79,6 +84,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .badge-bekliyor { background: var(--yellow-bg); color: var(--yellow); border: 1px solid #3a2e00; }
 .badge-tamamlandi { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
 .badge-degisim { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); }
+.badge-iptal { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .card-urun { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .card-not { font-size: 12px; color: var(--text3); margin-bottom: 10px; font-style: italic; }
@@ -108,6 +114,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .btn-green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
 .btn-blue { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
 .btn-orange { background: var(--orange-bg); border-color: var(--orange-border); color: var(--orange); }
+.btn-red { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
 .btn-ghost { background: transparent; border-color: var(--border); color: var(--text3); cursor: default; font-size: 11px; }
 
 .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 12px; color: var(--text3); text-align: center; }
@@ -132,6 +139,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .table-row:last-child { border-bottom: none; }
 .table-row:hover { background: var(--surface2); }
 .table-row.done { opacity: 0.45; }
+.table-row.iptal-row { opacity: 0.35; background: rgba(31,10,10,0.3); }
 .col-siparis { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); }
 .col-urun { font-size: 13px; color: var(--text); font-weight: 500; }
 .col-urun small { display: block; font-size: 11px; color: var(--text3); margin-top: 2px; }
@@ -156,12 +164,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .modal-detail .mrow:last-child { border-bottom: none; }
 .modal-detail .mkey { font-size: 12px; color: var(--text3); }
 .modal-detail .mval { font-size: 13px; color: var(--text); font-weight: 500; font-family: 'DM Mono', monospace; text-align: right; max-width: 60%; }
+.modal-detail .mval.red { color: var(--red); }
 .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
 .modal-cancel { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: var(--text2); font-size: 15px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .modal-confirm-green { flex: 2; background: var(--green); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .modal-confirm-blue { flex: 2; background: var(--blue); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .modal-confirm-orange { flex: 2; background: var(--orange); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-.modal-confirm-green:disabled, .modal-confirm-blue:disabled, .modal-confirm-orange:disabled { opacity: 0.5; }
+.modal-confirm-red { flex: 2; background: var(--red); border: none; border-radius: 10px; padding: 14px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.modal-confirm-green:disabled, .modal-confirm-blue:disabled, .modal-confirm-orange:disabled, .modal-confirm-red:disabled { opacity: 0.5; }
+
+/* İptal uyarı kutusu */
+.iptal-warn { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+.iptal-warn-title { font-size: 12px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.iptal-warn-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.iptal-warn-list li { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+.iptal-warn-list li::before { content: '•'; color: var(--red); font-size: 14px; }
 
 .degisim-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .degisim-item { display: flex; gap: 8px; align-items: center; }
@@ -221,6 +238,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   <div class="stat"><div class="stat-num red" id="countBekliyor">-</div><div class="stat-label">Bekliyor</div></div>
   <div class="stat"><div class="stat-num green" id="countTamamlandi">-</div><div class="stat-label">Tamamlandı</div></div>
   <div class="stat"><div class="stat-num teal" id="countDegisim">-</div><div class="stat-label">Değişim</div></div>
+  <div class="stat"><div class="stat-num dimred" id="countIptal">-</div><div class="stat-label">İptal</div></div>
   <div class="stat"><div class="stat-num" id="countToplam">-</div><div class="stat-label">Toplam</div></div>
 </div>
 
@@ -230,6 +248,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <button class="filter-btn" onclick="setFilter('bekliyor', this)">Bekliyor</button>
     <button class="filter-btn" onclick="setFilter('tamamlandi', this)">Tamamlandı</button>
     <button class="filter-btn teal-tab" onclick="setFilter('degisim', this)">🔄 Değişenler</button>
+    <button class="filter-btn red-tab" onclick="setFilter('iptal', this)">🚫 İptal</button>
   </div>
   <div class="search-wrap">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -300,6 +319,24 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   </div>
 </div>
 
+<!-- SİPARİŞ İPTAL MODAL -->
+<div class="modal-overlay" id="iptalModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>🚫 Tüm Siparişi İptal Et</h3>
+    <p>Bu sipariş numarasına ait <strong>tüm satırlar</strong> "İptal Edildi" durumuna geçecek. T-Soft'a otomatik not eklenecek, süreç değişikliğini manuel yapacaksın.</p>
+    <div class="modal-detail" id="iptalDetail"></div>
+    <div class="iptal-warn">
+      <div class="iptal-warn-title">⚠️ Bu işlem geri alınamaz</div>
+      <ul class="iptal-warn-list" id="iptalWarnList"></ul>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeAllModals()">Vazgeç</button>
+      <button class="modal-confirm-red" id="iptalConfirm" onclick="confirmIptal()">🚫 Siparişi İptal Et</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- BOTTOM NAV -->
@@ -353,12 +390,11 @@ async function loadData() {
 }
 
 function updateStats() {
-  const isDone = r => r['Durum'] === 'Tedarik Edildi ✓' || r['Durum'] === 'Değişim Yapıldı';
-  const isDegisim = r => r['Durum'] === 'Değişim Yapıldı';
-  document.getElementById('countBekliyor').textContent = allData.filter(r => !isDone(r)).length;
+  document.getElementById('countBekliyor').textContent  = allData.filter(r => !isDone(r)).length;
   document.getElementById('countTamamlandi').textContent = allData.filter(r => r['Durum'] === 'Tedarik Edildi ✓').length;
-  document.getElementById('countDegisim').textContent = allData.filter(r => isDegisim(r)).length;
-  document.getElementById('countToplam').textContent = allData.length;
+  document.getElementById('countDegisim').textContent   = allData.filter(r => r['Durum'] === 'Değişim Yapıldı').length;
+  document.getElementById('countIptal').textContent     = allData.filter(r => r['Durum'] === 'İptal Edildi').length;
+  document.getElementById('countToplam').textContent    = allData.length;
 }
 
 function setFilter(f, el) {
@@ -368,12 +404,14 @@ function setFilter(f, el) {
   renderAll();
 }
 
-function isDone(row) { return row['Durum'] === 'Tedarik Edildi ✓' || row['Durum'] === 'Değişim Yapıldı'; }
-function isDegisim(row) { return row['Durum'] === 'Değişim Yapıldı'; }
+function isDone(row) {
+  return row['Durum'] === 'Tedarik Edildi ✓'
+      || row['Durum'] === 'Değişim Yapıldı'
+      || row['Durum'] === 'İptal Edildi';
+}
+function isDegisim(row)  { return row['Durum'] === 'Değişim Yapıldı'; }
+function isIptal(row)    { return row['Durum'] === 'İptal Edildi'; }
 
-/* Değişim Ürünleri alanını parse et
-   Sheet'ten gelen format: '[{"urun":"X","adet":"2"}]' (JSON string)
-   veya "X x2, Y x1" (düz metin) */
 function parseDegisimUrunler(raw) {
   if (!raw) return [];
   try { return JSON.parse(raw); } catch(e) { return []; }
@@ -382,6 +420,7 @@ function parseDegisimUrunler(raw) {
 function getBadge(row) {
   if (row['Durum'] === 'Tedarik Edildi ✓') return `<span class="badge badge-tamamlandi"><span class="badge-dot"></span>Tamamlandı</span>`;
   if (row['Durum'] === 'Değişim Yapıldı')  return `<span class="badge badge-degisim"><span class="badge-dot"></span>Değişim</span>`;
+  if (row['Durum'] === 'İptal Edildi')      return `<span class="badge badge-iptal"><span class="badge-dot"></span>İptal</span>`;
   return `<span class="badge badge-bekliyor"><span class="badge-dot"></span>Bekliyor</span>`;
 }
 
@@ -390,9 +429,7 @@ function renderDegisimBox(row) {
   if (!urunler.length) return '';
   return `
     <div class="degisim-box">
-      <div class="degisim-box-header">
-        <span>🔄 Değiştirilen Ürünler</span>
-      </div>
+      <div class="degisim-box-header"><span>🔄 Değiştirilen Ürünler</span></div>
       <div class="degisim-original"><s>${row['Ürün Adı'] || '-'}</s>&nbsp;→</div>
       <div class="degisim-box-body">
         ${urunler.map(u => `
@@ -412,15 +449,26 @@ function renderDegisimCell(row) {
 
 function getActionBtns(satirNo, row) {
   const rj = JSON.stringify(row).replace(/'/g,"&#39;");
+
+  // İptal edilmiş → sadece iptal rozeti, başka aksiyon yok
+  if (isIptal(row)) {
+    return `<button class="btn btn-ghost" disabled>🚫 İptal Edildi</button>`;
+  }
+
+  // Tamamlanmış (tedarik veya değişim) → stok butonu + iptal butonu
   if (isDone(row)) {
     return `
       <button class="btn btn-ghost" disabled>${row['Durum'] === 'Değişim Yapıldı' ? '🔄 Değişim' : '✓ Tamamlandı'}</button>
-      <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>`;
+      <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>
+      <button class="btn btn-red" onclick='openIptalModal("${row['Sipariş No']}",${rj})'>🚫 İptal</button>`;
   }
+
+  // Bekliyor → tüm butonlar
   return `
-    <button class="btn btn-green" onclick='openTedarikModal(${satirNo}, ${rj})'>Tedarik Edildi</button>
-    <button class="btn btn-blue"  onclick='openDegisimModal(${satirNo}, ${rj})'>Değişim</button>
-    <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>`;
+    <button class="btn btn-green"  onclick='openTedarikModal(${satirNo}, ${rj})'>Tedarik Edildi</button>
+    <button class="btn btn-blue"   onclick='openDegisimModal(${satirNo}, ${rj})'>Değişim</button>
+    <button class="btn btn-orange" onclick='openStokModal(${satirNo}, ${rj})'>📦 Stok</button>
+    <button class="btn btn-red"    onclick='openIptalModal("${row['Sipariş No']}",${rj})'>🚫 İptal</button>`;
 }
 
 function getFiltered() {
@@ -428,6 +476,7 @@ function getFiltered() {
   let rows = allData;
   if (currentFilter === 'bekliyor')    rows = rows.filter(r => !isDone(r));
   if (currentFilter === 'tamamlandi')  rows = rows.filter(r => r['Durum'] === 'Tedarik Edildi ✓');
+  if (currentFilter === 'iptal')       rows = rows.filter(r => isIptal(r));
   if (currentFilter === 'degisim') {
     rows = rows.filter(r => isDegisim(r));
     rows = [...rows].sort((a, b) => {
@@ -460,7 +509,8 @@ function renderAll() {
 
   document.getElementById('mobileCards').innerHTML = rows.map(row => {
     const satirNo = row.satirNo;
-    return `<div class="card ${isDone(row) ? 'done' : ''} ${isDegisim(row) ? 'degisim-card' : ''}">
+    const cardClass = isIptal(row) ? 'iptal-card' : (isDone(row) ? 'done' : '') + (isDegisim(row) ? ' degisim-card' : '');
+    return `<div class="card ${cardClass}">
       <div class="card-top">
         <div class="card-head"><div class="card-siparis">${row['Sipariş No'] || '-'}</div>${getBadge(row)}</div>
         <div class="card-urun">${row['Ürün Adı'] || '-'}</div>
@@ -480,7 +530,8 @@ function renderAll() {
 
   document.getElementById('desktopTable').innerHTML = rows.map(row => {
     const satirNo = row.satirNo;
-    return `<div class="table-row ${isDone(row) ? 'done' : ''}">
+    const rowClass = isIptal(row) ? 'iptal-row' : (isDone(row) ? 'done' : '');
+    return `<div class="table-row ${rowClass}">
       <div class="col-siparis">${row['Sipariş No'] || '-'}</div>
       <div class="col-urun">${row['Ürün Adı'] || '-'}${row['Not'] ? `<small>${row['Not']}</small>` : ''}</div>
       <div class="col-num eksik">${row['Eksik Miktar'] || '-'}</div>
@@ -578,7 +629,6 @@ async function confirmDegisim() {
     const idx = allData.findIndex(r => r.satirNo === selectedRow.satirNo);
     if (idx !== -1) {
       allData[idx]['Durum'] = 'Değişim Yapıldı';
-      // Lokal önizleme için de değişim ürünlerini kaydet
       allData[idx]['Değişim Ürünleri'] = JSON.stringify(yeniUrunler);
     }
     updateStats(); renderAll(); closeAllModals();
@@ -622,12 +672,90 @@ async function confirmStok() {
   finally { btn.disabled = false; btn.textContent = '📤 Muhasebeye Gönder'; }
 }
 
+/* ====== SİPARİŞ İPTAL ====== */
+/*
+  n8n tarafında yapman gereken:
+  tedarik-tamamla webhook'unu alan IF node'una yeni bir dal ekle:
+    Koşul: {{ $json.tip }} === "iptal"
+  Bu dal:
+    1. Google Sheets → aynı siparisNo'ya sahip tüm satırları bul (satirNoListesi ile döngü)
+    2. Her satır için Durum sütununu "İptal Edildi" yap
+    3. T-Soft API → sipariş notuna "Tüm sipariş iptal edildi" ekle (mevcut T-Soft node'unu kopyala)
+  
+  Webhook'a gelen body:
+  {
+    tip: "iptal",
+    siparisNo: "HS-12345",
+    satirNoListesi: [3, 7, 12],   // etkilenen satır numaraları
+    iptalEdenUrun: "Ürün Adı",    // ilk tıklanan satırın ürünü (T-Soft notu için referans)
+    toplamSatir: 3
+  }
+*/
+function openIptalModal(siparisNo, row) {
+  // Aynı sipariş no'ya ait TÜM satırları bul
+  const ilgiliSatirlar = allData.filter(r => r['Sipariş No'] === siparisNo);
+  const bekleyenler    = ilgiliSatirlar.filter(r => !isIptal(r)); // zaten iptal olmayanlar
+
+  selectedRow = { siparisNo, satirlar: ilgiliSatirlar, bekleyenler };
+
+  // Kaç satır etkilenecek, hangi ürünler
+  document.getElementById('iptalDetail').innerHTML = `
+    <div class="mrow"><span class="mkey">Sipariş No</span><span class="mval">${siparisNo}</span></div>
+    <div class="mrow"><span class="mkey">Toplam Satır</span><span class="mval">${ilgiliSatirlar.length} satır</span></div>
+    <div class="mrow"><span class="mkey">İptal Edilecek</span><span class="mval red">${bekleyenler.length} satır</span></div>`;
+
+  document.getElementById('iptalWarnList').innerHTML = bekleyenler.map(r =>
+    `<li>${r['Ürün Adı'] || '-'} — <span style="color:var(--text3)">${r['Durum'] || 'Bekliyor'}</span></li>`
+  ).join('');
+
+  document.getElementById('iptalModal').classList.add('show');
+}
+
+async function confirmIptal() {
+  if (!selectedRow || !selectedRow.bekleyenler.length) return;
+  const btn = document.getElementById('iptalConfirm');
+  btn.disabled = true; btn.textContent = 'İptal ediliyor...';
+  try {
+    const satirNoListesi = selectedRow.bekleyenler.map(r => r.satirNo);
+
+    // n8n'e tek istek: tüm satır no'larını gönder
+    fetch(TAMAMLA_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tip: 'iptal',
+        siparisNo: selectedRow.siparisNo,
+        satirNoListesi,
+        iptalEdenUrun: selectedRow.bekleyenler[0]['Ürün Adı'] || '',
+        toplamSatir: satirNoListesi.length
+      })
+    });
+
+    await new Promise(r => setTimeout(r, 600));
+
+    // Lokal state güncelle
+    satirNoListesi.forEach(sn => {
+      const idx = allData.findIndex(r => r.satirNo === sn);
+      if (idx !== -1) allData[idx]['Durum'] = 'İptal Edildi';
+    });
+
+    updateStats(); renderAll(); closeAllModals();
+    showToast(`🚫 ${satirNoListesi.length} satır iptal edildi`);
+  } finally {
+    btn.disabled = false; btn.textContent = '🚫 Siparişi İptal Et';
+  }
+}
+
 function closeAllModals() {
-  ['tedarikModal','degisimModal','stokModal'].forEach(id => document.getElementById(id).classList.remove('show'));
+  ['tedarikModal','degisimModal','stokModal','iptalModal'].forEach(id =>
+    document.getElementById(id).classList.remove('show')
+  );
   selectedRow = null;
 }
-['tedarikModal','degisimModal','stokModal'].forEach(id => {
-  document.getElementById(id).addEventListener('click', e => { if (e.target === document.getElementById(id)) closeAllModals(); });
+['tedarikModal','degisimModal','stokModal','iptalModal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target === document.getElementById(id)) closeAllModals();
+  });
 });
 
 loadData();

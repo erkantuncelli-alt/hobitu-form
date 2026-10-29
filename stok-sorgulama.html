@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Mağaza Stok Sorgulama</title>
-<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.19.1/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
@@ -14,19 +14,24 @@
   .input-group { display: flex; gap: 8px; margin-bottom: 8px; }
   input[type="text"] { flex: 1; border: 1px solid #ddd; border-radius: 10px; padding: 12px 14px; font-size: 16px; outline: none; }
   input[type="text"]:focus { border-color: #e8604c; }
-  .btn-scan { background: #2c3e50; color: #fff; border: none; border-radius: 10px; padding: 0 14px; font-size: 20px; cursor: pointer; flex-shrink: 0; }
+  .btn-scan { background: #2c3e50; color: #fff; border: none; border-radius: 10px; padding: 0 16px; font-size: 20px; cursor: pointer; flex-shrink: 0; }
   .btn-photo { width: 100%; background: #34495e; color: #fff; border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .btn-submit { width: 100%; background: #e8604c; color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 4px; }
   #file-input { display: none; }
+
+  /* Kamera alanı */
   #camera-wrapper { display: none; margin-top: 12px; border-radius: 14px; overflow: hidden; border: 2px solid #e8604c; background: #000; position: relative; }
-  #zxing-video { width: 100%; max-height: 260px; object-fit: cover; display: block; }
-  .scan-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 10; }
-  .scan-guide { width: 280px; height: 90px; border: 2.5px solid #e8604c; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); overflow: hidden; }
+  #quagga-viewport { position: relative; width: 100%; height: 240px; overflow: hidden; }
+  #quagga-viewport video { width: 100% !important; height: 240px !important; object-fit: cover; display: block; }
+  #quagga-viewport canvas { position: absolute; top: 0; left: 0; width: 100% !important; height: 240px !important; }
+  .scan-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 20; }
+  .scan-guide { width: 80%; height: 80px; border: 2.5px solid #e8604c; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); overflow: hidden; }
   .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: #e8604c; box-shadow: 0 0 8px #e8604c; animation: scanline 1.4s ease-in-out infinite; }
   @keyframes scanline { 0%,100% { top: 0; } 50% { top: calc(100% - 2px); } }
   .cam-tip { background: #0a0a0a; text-align: center; font-size: 12px; color: #888; padding: 7px; }
   .cam-tip span { color: #e8604c; font-weight: 600; }
   .btn-stop { width: 100%; background: #1a1d27; border: none; border-top: 1px solid #2a2d3a; color: #aaa; font-size: 13px; padding: 10px; cursor: pointer; font-family: inherit; }
+
   #result-card { display: none; margin-top: 20px; width: 100%; max-width: 420px; background: #fff; border-radius: 16px; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 20px; text-align: center; }
   #result-card img { width: 130px; height: 130px; object-fit: contain; border-radius: 10px; border: 1px solid #eee; margin-bottom: 12px; }
   #result-card h2 { font-size: 17px; color: #2c3e50; margin-bottom: 4px; line-height: 1.4; }
@@ -60,8 +65,7 @@
   <input type="file" id="file-input" accept="image/*" capture="environment" onchange="scanFromPhoto(this)">
 
   <div id="camera-wrapper">
-    <div style="position:relative;">
-      <video id="zxing-video" autoplay muted playsinline></video>
+    <div id="quagga-viewport">
       <div class="scan-overlay">
         <div class="scan-guide"><div class="scan-line"></div></div>
       </div>
@@ -94,19 +98,15 @@
   const WEBHOOK_URL = "https://tuzwzs6k.rpcld.app/webhook/stok-sorgula";
   const API_KEY = "hobitu2024";
 
-  const btnScan       = document.getElementById("btnScan");
-  const btnSubmit     = document.getElementById("btnSubmit");
-  const cameraWrapper = document.getElementById("camera-wrapper");
   const queryInput    = document.getElementById("query");
+  const cameraWrapper = document.getElementById("camera-wrapper");
   const loading       = document.getElementById("loading");
   const resultCard    = document.getElementById("result-card");
   const errorMsg      = document.getElementById("errorMsg");
-  const video         = document.getElementById("zxing-video");
 
-  let codeReader = null;
-  let scanning   = false;
-  let lastScanned = "";
-  let lastScannedTime = 0;
+  let scanning = false;
+  let lastCode = "";
+  let lastTime = 0;
 
   function showToast(msg, dur) {
     const t = document.getElementById('toast');
@@ -115,103 +115,127 @@
     setTimeout(() => t.classList.remove('show'), dur || 2500);
   }
 
-  // --- FOTOĞRAFLA TARA (ZXing) ---
-  async function scanFromPhoto(input) {
+  // --- FOTOĞRAFLA TARA ---
+  function scanFromPhoto(input) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
     input.value = "";
     showToast("Fotoğraf taranıyor...", 3000);
-    try {
-      const reader = new ZXing.BrowserMultiFormatReader();
-      const imgUrl = URL.createObjectURL(file);
-      const result = await reader.decodeFromImageUrl(imgUrl);
+
+    const imgUrl = URL.createObjectURL(file);
+    Quagga.decodeSingle({
+      decoder: {
+        readers: ["ean_reader","ean_8_reader","code_128_reader","code_39_reader","upc_reader"]
+      },
+      locate: true,
+      src: imgUrl
+    }, function(result) {
       URL.revokeObjectURL(imgUrl);
-      if (result && result.text) {
-        if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
-        queryInput.value = result.text;
-        showToast('✓ Barkod okundu: ' + result.text);
-        submitQuery(result.text);
+      if (result && result.codeResult) {
+        const code = result.codeResult.code;
+        if (navigator.vibrate) navigator.vibrate([80,30,80]);
+        queryInput.value = code;
+        showToast('✓ Barkod okundu: ' + code);
+        submitQuery(code);
+      } else {
+        showToast('Barkod okunamadı, tekrar deneyin.');
       }
-    } catch(e) {
-      showToast('Barkod okunamadı, tekrar deneyin.');
-    }
+    });
   }
 
-  // --- CANLI KAMERA (ZXing) ---
+  // --- CANLI KAMERA ---
   function toggleCamera() {
     if (scanning) { stopCamera(); } else { startCamera(); }
   }
 
-  async function startCamera() {
+  function startCamera() {
     errorMsg.style.display = "none";
     cameraWrapper.style.display = "block";
-    btnScan.textContent = '✕';
+    document.getElementById("btnScan").textContent = "✕";
     scanning = true;
 
-    // ZXing EAN-13 + diğer 1D barkodlar için optimize
-    const hints = new Map();
-    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
-      ZXing.BarcodeFormat.EAN_13,
-      ZXing.BarcodeFormat.EAN_8,
-      ZXing.BarcodeFormat.CODE_128,
-      ZXing.BarcodeFormat.CODE_39,
-      ZXing.BarcodeFormat.UPC_A,
-      ZXing.BarcodeFormat.UPC_E,
-      ZXing.BarcodeFormat.ITF,
-      ZXing.BarcodeFormat.CODABAR,
-      ZXing.BarcodeFormat.DATA_MATRIX,
-      ZXing.BarcodeFormat.QR_CODE
-    ]);
-    hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
-
-    codeReader = new ZXing.BrowserMultiFormatReader(hints, {
-      delayBetweenScanAttempts: 100,
-      delayBetweenScanSuccess: 1500
+    Quagga.init({
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.getElementById("quagga-viewport"),
+        constraints: {
+          width: { min: 640 },
+          height: { min: 480 },
+          facingMode: "environment",
+          aspectRatio: { min: 1, max: 2 }
+        },
+        area: {
+          top:    "20%",
+          right:  "10%",
+          left:   "10%",
+          bottom: "20%"
+        }
+      },
+      locator: {
+        patchSize: "medium",
+        halfSample: true
+      },
+      numOfWorkers: 2,
+      frequency: 10,
+      decoder: {
+        readers: [
+          "ean_reader",
+          "ean_8_reader",
+          "code_128_reader",
+          "code_39_reader",
+          "upc_reader",
+          "upc_e_reader",
+          "codabar_reader",
+          "i2of5_reader"
+        ],
+        multiple: false
+      },
+      locate: true
+    }, function(err) {
+      if (err) {
+        cameraWrapper.style.display = "none";
+        document.getElementById("btnScan").textContent = "📷";
+        scanning = false;
+        showToast("Kamera açılamadı: " + err.message);
+        return;
+      }
+      Quagga.start();
     });
 
-    try {
-      // Arka kamerayı seç
-      const devices = await ZXing.BrowserCodeReader.listVideoInputDevices();
-      const backCamera = devices.find(d =>
-        /back|rear|environment/i.test(d.label)
-      ) || devices[devices.length - 1];
+    Quagga.onDetected(function(result) {
+      if (!result || !result.codeResult) return;
+      const code = result.codeResult.code;
+      if (!code || code.length < 4) return;
 
-      const deviceId = backCamera ? backCamera.deviceId : undefined;
+      // Güvenilirlik kontrolü — en az 2 doğrulama
+      const errors = result.codeResult.decodedCodes
+        .filter(x => x.error !== undefined)
+        .map(x => x.error);
+      const avgErr = errors.reduce((a,b) => a + b, 0) / (errors.length || 1);
+      if (avgErr > 0.15) return; // düşük güven, atla
 
-      await codeReader.decodeFromVideoDevice(deviceId, video, (result, err) => {
-        if (!result) return;
+      // Tekrar okuma engeli
+      const now = Date.now();
+      if (code === lastCode && now - lastTime < 2000) return;
+      lastCode = code;
+      lastTime = now;
 
-        const code = result.getText();
-        if (!code || code.length < 4) return;
-
-        // Aynı barkodu 2 saniye içinde tekrar okuma
-        const now = Date.now();
-        if (code === lastScanned && now - lastScannedTime < 2000) return;
-        lastScanned = code;
-        lastScannedTime = now;
-
-        if (navigator.vibrate) navigator.vibrate([80, 30, 80]);
-        queryInput.value = code;
-        stopCamera();
-        showToast('✓ Barkod okundu: ' + code);
-        submitQuery(code);
-      });
-    } catch(err) {
-      cameraWrapper.style.display = "none";
-      btnScan.textContent = '📷';
-      scanning = false;
-      showToast('Kamera açılamadı: ' + err.message);
-    }
+      if (navigator.vibrate) navigator.vibrate([80,30,80]);
+      queryInput.value = code;
+      stopCamera();
+      showToast('✓ Barkod okundu: ' + code);
+      submitQuery(code);
+    });
   }
 
-  async function stopCamera() {
-    if (codeReader) {
-      codeReader.reset();
-      codeReader = null;
+  function stopCamera() {
+    if (scanning) {
+      Quagga.stop();
+      scanning = false;
     }
-    scanning = false;
     cameraWrapper.style.display = "none";
-    btnScan.textContent = '📷';
+    document.getElementById("btnScan").textContent = "📷";
   }
 
   // --- SORGU ---
@@ -221,11 +245,9 @@
     submitQuery(q);
   });
 
+  document.getElementById("btnSubmit");
   queryInput.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      const q = queryInput.value.trim();
-      if (q) submitQuery(q);
-    }
+    if (e.key === "Enter") { const q = queryInput.value.trim(); if (q) submitQuery(q); }
   });
 
   async function submitQuery(query) {
@@ -241,7 +263,7 @@
       const data = await res.json();
       loading.style.display = "none";
       renderResult(data);
-    } catch (e) {
+    } catch(e) {
       loading.style.display = "none";
       errorMsg.style.display = "block";
     }
@@ -250,22 +272,13 @@
   function renderResult(data) {
     const d = data?.data?.[0] || data?.body?.data?.[0] || data?.[0];
     if (!d) { errorMsg.style.display = "block"; return; }
-    const imgUrl = d.MainProductImageUrl || d.ImageUrl || "";
-    document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + imgUrl;
+    document.getElementById("res-img").src = "https://www.hobitu.com/images/urunler/" + (d.MainProductImageUrl || d.ImageUrl || "");
     document.getElementById("res-name").textContent = d.ProductName || "Ürün Bulunamadı";
     document.getElementById("res-cat").textContent = d.DefaultCategoryPath || "";
-    if (d.Property1) {
-      document.getElementById("res-renk").textContent = d.Property1;
-      document.getElementById("row-renk").style.display = "flex";
-    } else {
-      document.getElementById("row-renk").style.display = "none";
-    }
-    if (d.Property2) {
-      document.getElementById("res-beden").textContent = d.Property2;
-      document.getElementById("row-beden").style.display = "flex";
-    } else {
-      document.getElementById("row-beden").style.display = "none";
-    }
+    if (d.Property1) { document.getElementById("res-renk").textContent = d.Property1; document.getElementById("row-renk").style.display = "flex"; }
+    else { document.getElementById("row-renk").style.display = "none"; }
+    if (d.Property2) { document.getElementById("res-beden").textContent = d.Property2; document.getElementById("row-beden").style.display = "flex"; }
+    else { document.getElementById("row-beden").style.display = "none"; }
     const stock = parseInt(d.Stock) || 0;
     const stockEl = document.getElementById("res-stock");
     stockEl.textContent = stock + " Adet";
